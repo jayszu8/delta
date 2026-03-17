@@ -2,24 +2,24 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  bg: "#f4f8f5",
-  surface: "#e8f0ea",
-  border: "#d4e4d8",
-  headline: "#142a1e",
-  body: "#3a5a44",
-  muted: "#5a7a64",
-  teal: "#1a7a5a",
-  pitchLine: "#d4e4d8",
-  posAttack: "#c8956a",
-  posMidfield: "#58a06a",
-  posDefence: "#8aaa90",
+  bg: "#F7F6FA",
+  surface: "#F0EEF6",
+  border: "#D8D4E4",
+  headline: "#141618",
+  body: "#3a3e44",
+  muted: "#6a7078",
+  accent: "#6B5CA5",
+  pitchLine: "#D8D4E4",
+  posAttack: "#6B5CA5",
+  posMidfield: "#8A7CC0",
+  posDefence: "#A89CD0",
 };
 
 const typeColor = {
-  "DATA ESSAY": "#1a7a5a",
-  PROFILE: "#6a5a9a",
-  RECAP: "#9a5a7a",
-  SIMULATION: "#9a5a3a",
+  "DATA ESSAY": "#6B5CA5",
+  PROFILE: "#9B8BD5",
+  RECAP: "#4A3D7A",
+  SIMULATION: "#7A6CB5",
 };
 
 const articles = [
@@ -44,20 +44,7 @@ const lineLabels = {
 
 const posColor = { attack: P.posAttack, midfield: P.posMidfield, defence: P.posDefence };
 
-function GapScore({ score }) {
-  const val = parseFloat(score);
-  const color = val >= 8.5 ? "#1a6a3a" : val >= 7.0 ? "#3a7a4a" : "#6a8a70";
-  return (
-    <span style={{
-      fontFamily: "'Instrument Serif', Georgia, serif",
-      fontStyle: "italic",
-      fontSize: "14px",
-      color,
-    }}>
-      {score}
-    </span>
-  );
-}
+// GapScore rendered inline with P.accent color
 
 export default function DeltaFootball() {
   const [hovered, setHovered] = useState(null);
@@ -70,7 +57,7 @@ export default function DeltaFootball() {
       fontFamily: "'Instrument Serif', Georgia, serif",
       color: P.body, position: "relative",
     }}>
-      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
       {/* Pitch markings */}
       <svg style={{
@@ -90,7 +77,8 @@ export default function DeltaFootball() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.teal} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="#6B5CA5" fillOpacity="0.12" stroke="#6B5CA5" strokeWidth="1.8" />
+            <polygon points="16,12 22,23 10,23" fill="#F7F6FA" stroke="#9B8BD5" strokeWidth="0.8" />
           </svg>
           <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
           <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
@@ -109,7 +97,7 @@ export default function DeltaFootball() {
               fontSize: "13px", color: P.muted, cursor: "pointer",
               textDecoration: "none", transition: "color 0.2s",
             }}
-            onMouseEnter={(e) => e.target.style.color = P.headline}
+            onMouseEnter={(e) => e.target.style.color = "#6B5CA5"}
             onMouseLeave={(e) => e.target.style.color = P.muted}
             >
               {item.label}
@@ -125,8 +113,8 @@ export default function DeltaFootball() {
         position: "relative", zIndex: 5,
       }}>
         <div style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: "11px", color: P.teal, letterSpacing: "0.06em",
+          fontFamily: "'Instrument Serif', Georgia, serif",
+          fontSize: "11px", fontStyle: "italic", color: P.accent, letterSpacing: "0.06em",
           marginBottom: "16px",
           opacity: loaded ? 0.7 : 0,
           transition: "opacity 0.6s ease-out",
@@ -169,8 +157,8 @@ export default function DeltaFootball() {
               marginBottom: "28px",
             }}>
               <span style={{
-                fontFamily: "'IBM Plex Mono', monospace",
-                fontSize: "10px", color: P.muted, letterSpacing: "0.08em",
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: "10px", color: P.muted, letterSpacing: "0.06em",
               }}>
                 {lineLabels[line].label.toUpperCase()}
               </span>
@@ -202,9 +190,9 @@ export default function DeltaFootball() {
                       display: "flex", alignItems: "center", gap: "8px",
                       marginBottom: "8px",
                     }}>
+                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: P.accent, flexShrink: 0 }} />
                       <span style={{
-                        fontFamily: "'IBM Plex Mono', monospace",
-                        fontSize: "10px", fontWeight: 500,
+                        fontSize: "10px", fontWeight: 500, letterSpacing: "0.02em",
                         color: "#ffffff",
                         background: posColor[line],
                         padding: "1px 6px", borderRadius: "3px",
@@ -212,7 +200,7 @@ export default function DeltaFootball() {
                         {article.pos}
                       </span>
                       <span style={{
-                        fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
+                        fontSize: "11px", fontStyle: "italic",
                         color: typeColor[article.type] || P.muted,
                       }}>
                         {article.type}
@@ -222,7 +210,7 @@ export default function DeltaFootball() {
                       fontStyle: "italic", fontSize: "24px", color: P.headline,
                       lineHeight: 1.25, marginBottom: "6px",
                       transition: "color 0.2s",
-                      ...(hovered === article.slug ? { color: P.teal } : {}),
+                      ...(hovered === article.slug ? { color: P.accent } : {}),
                     }}>
                       {article.title}
                     </h3>
@@ -233,11 +221,18 @@ export default function DeltaFootball() {
 
                   <div style={{
                     display: "flex", flexDirection: "column", alignItems: "flex-end",
-                    gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "24px",
+                    gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "20px",
                   }}>
-                    <GapScore score={article.gap} />
                     <span style={{
-                      fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
+                      fontFamily: "'Instrument Serif', Georgia, serif",
+                      fontStyle: "italic",
+                      fontSize: "20px",
+                      color: P.accent,
+                    }}>
+                      {article.gap}
+                    </span>
+                    <span style={{
+                      fontSize: "11px",
                       color: P.muted,
                     }}>
                       {article.date}

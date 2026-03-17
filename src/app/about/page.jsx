@@ -8,15 +8,15 @@ const P = {
   body: "#3a3e44",
   section: "#2a2e34",
   muted: "#6a7078",
-  border: "#e2e5ea",
-  accent: "#2a6a9a",
+  border: "#E4E2EA",
+  accent: "#6B5CA5",
   faint: "#9aa0a8",
 };
 
 export default function AboutPage() {
   return (
     <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Instrument Serif', Georgia, serif", color: P.body }}>
-      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
       <header style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -24,7 +24,8 @@ export default function AboutPage() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.accent} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="#6B5CA5" fillOpacity="0.12" stroke="#6B5CA5" strokeWidth="1.8" />
+            <polygon points="16,12 22,23 10,23" fill="#f8f9fb" stroke="#9B8BD5" strokeWidth="0.8" />
           </svg>
           <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
           <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>

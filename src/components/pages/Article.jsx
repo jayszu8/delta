@@ -9,12 +9,12 @@ const P = {
   borderMid: "#d8d6d0",
   // Light header
   headerBg: "#f8f9fb",
-  headerBorder: "#e2e5ea",
+  headerBorder: "#E4E2EA",
   navText: "#6a7078",
   // Sport accents
-  football: { primary: "#1a7a5a", light: "#e6f4ee", border: "#b8dcc8", dark: "#0a4a3a" },
-  f1: { primary: "#5a4a9a", light: "#eee8f8", border: "#ccc0e4", dark: "#3a2a6a" },
-  crossSport: { primary: "#8a6a20", light: "#f8f0dc", border: "#e0d0a8", dark: "#5a4418" },
+  football: { primary: "#6B5CA5", light: "#F2F0F8", border: "#D8D4E4", dark: "#4A3D7A" },
+  f1: { primary: "#9B8BD5", light: "#F4F2FA", border: "#E0DCF0", dark: "#6B5CA5" },
+  crossSport: { primary: "#4A3D7A", light: "#EEEAF4", border: "#D0CCE0", dark: "#3A2D6A" },
   // Text
   black: "#1a1a18",
   darkGray: "#2a2a28",
@@ -65,7 +65,7 @@ function GapScoreBlock({ score, sport }) {
       </div>
       <div>
         <div style={{
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Instrument Serif', Georgia, serif",
           fontSize: "11px", fontWeight: 500, color: P.darkGray,
           letterSpacing: "0.04em", marginBottom: "2px",
         }}>
@@ -193,7 +193,7 @@ function ChartPlaceholder({ accent }) {
       </svg>
       <div style={{
         marginTop: "16px",
-        fontFamily: "'IBM Plex Mono', monospace",
+        fontFamily: "'Instrument Serif', Georgia, serif",
         fontSize: "10px", color: P.caption, letterSpacing: "0.04em",
       }}>
         HOME PERFORMANCE PROFILE — PRE VS. POST STADIUM MOVE
@@ -239,7 +239,7 @@ function Callout({ label, text, accent }) {
       borderRadius: "10px",
     }}>
       <div style={{
-        fontFamily: "'IBM Plex Mono', monospace",
+        fontFamily: "'Instrument Serif', Georgia, serif",
         fontSize: "10px", fontWeight: 500,
         color: accent.primary, letterSpacing: "0.06em",
         marginBottom: "6px", textTransform: "uppercase",
@@ -273,13 +273,14 @@ export default function DeltaArticle() {
       {/* Light header bar */}
       <header style={{
         background: P.headerBg,
-        borderBottom: `0.5px solid ${P.headerBorder}`,
+        borderBottom: `2px solid ${accent.primary}`,
         padding: "12px 32px",
         display: "flex", justifyContent: "space-between", alignItems: "center",
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={accent.primary} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="#6B5CA5" fillOpacity="0.12" stroke="#6B5CA5" strokeWidth="1.8" />
+            <polygon points="16,12 22,23 10,23" fill="#fafaf8" stroke="#9B8BD5" strokeWidth="0.8" />
           </svg>
           <span style={{
             fontStyle: "italic", fontSize: "20px", color: P.black, lineHeight: 1,
@@ -300,7 +301,7 @@ export default function DeltaArticle() {
               fontSize: "11px", color: P.navText, textDecoration: "none",
               transition: "color 0.2s",
             }}
-            onMouseEnter={(e) => e.target.style.color = P.black}
+            onMouseEnter={(e) => e.target.style.color = "#6B5CA5"}
             onMouseLeave={(e) => e.target.style.color = P.navText}
             >
               {item.label}
@@ -324,7 +325,7 @@ export default function DeltaArticle() {
           transition: "all 0.5s ease-out",
         }}>
           <span style={{
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "11px", letterSpacing: "0.06em", fontWeight: 500,
             color: accent.primary,
           }}>
@@ -332,7 +333,7 @@ export default function DeltaArticle() {
           </span>
           <span style={{ color: P.muted }}>|</span>
           <span style={{
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "11px", letterSpacing: "0.04em",
             color: P.caption,
           }}>
@@ -398,7 +399,7 @@ export default function DeltaArticle() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span style={{
-              fontFamily: "'IBM Plex Mono', monospace",
+              fontFamily: "'Instrument Serif', Georgia, serif",
               fontSize: "12px", color: P.muted,
             }}>
               {article.date}
@@ -524,7 +525,7 @@ export default function DeltaArticle() {
           borderTop: `0.5px solid ${P.borderLight}`,
         }}>
           <div style={{
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "10px", letterSpacing: "0.06em",
             color: P.muted, marginBottom: "8px", textTransform: "uppercase",
           }}>
@@ -568,7 +569,7 @@ export default function DeltaArticle() {
           borderTop: `0.5px solid ${P.borderLight}`,
         }}>
           <div style={{
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "10px", letterSpacing: "0.06em",
             color: P.muted, marginBottom: "16px", textTransform: "uppercase",
           }}>
@@ -606,7 +607,7 @@ export default function DeltaArticle() {
                   </div>
                   <div style={{ display: "flex", gap: "8px", marginTop: "2px" }}>
                     <span style={{
-                      fontFamily: "'IBM Plex Mono', monospace",
+                      fontFamily: "'Instrument Serif', Georgia, serif",
                       fontSize: "10px", color: relAccent.primary,
                     }}>
                       {related.sport}

@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  bg: "#f8f6f2",
-  surface: "#f0ece2",
-  border: "#e4dcc8",
-  headline: "#2a2418",
-  body: "#4a4030",
-  muted: "#8a7a58",
-  ochre: "#8a6a20",
-  football: "#1a7a5a",
-  f1: "#5a4a9a",
+  bg: "#F5F4F8",
+  surface: "#EEEAF4",
+  border: "#D0CCE0",
+  headline: "#141618",
+  body: "#3a3e44",
+  muted: "#6a7078",
+  accent: "#4A3D7A",
+  football: "#6B5CA5",
+  f1: "#9B8BD5",
 };
 
 const articles = [
@@ -48,20 +48,7 @@ const articles = [
   },
 ];
 
-function GapScore({ score }) {
-  const val = parseFloat(score);
-  const color = val >= 8.5 ? "#4a6a20" : val >= 7.0 ? "#6a7a30" : "#8a8a60";
-  return (
-    <span style={{
-      fontFamily: "'Instrument Serif', Georgia, serif",
-      fontStyle: "italic",
-      fontSize: "14px",
-      color,
-    }}>
-      {score}
-    </span>
-  );
-}
+// GapScore rendered inline with P.accent color
 
 export default function DeltaCrossSport() {
   const [hovered, setHovered] = useState(null);
@@ -74,7 +61,7 @@ export default function DeltaCrossSport() {
       fontFamily: "'Instrument Serif', Georgia, serif",
       color: P.body,
     }}>
-      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
       {/* Header */}
       <header style={{
@@ -83,7 +70,8 @@ export default function DeltaCrossSport() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.ochre} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="#6B5CA5" fillOpacity="0.12" stroke="#6B5CA5" strokeWidth="1.8" />
+            <polygon points="16,12 22,23 10,23" fill="#F5F4F8" stroke="#9B8BD5" strokeWidth="0.8" />
           </svg>
           <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
           <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
@@ -102,7 +90,7 @@ export default function DeltaCrossSport() {
               fontSize: "13px", color: P.muted, cursor: "pointer",
               textDecoration: "none", transition: "color 0.2s",
             }}
-            onMouseEnter={(e) => e.target.style.color = P.headline}
+            onMouseEnter={(e) => e.target.style.color = "#6B5CA5"}
             onMouseLeave={(e) => e.target.style.color = P.muted}
             >
               {item.label}
@@ -183,8 +171,8 @@ export default function DeltaCrossSport() {
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <div style={{ width: "16px", height: "0.5px", background: P.football, opacity: 0.25 }} />
                 <span style={{
-                  fontFamily: "'IBM Plex Mono', monospace",
-                  fontSize: "9px", color: P.ochre, letterSpacing: "0.06em",
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontSize: "9px", color: P.accent, letterSpacing: "0.06em",
                 }}>
                   VS
                 </span>
@@ -207,14 +195,15 @@ export default function DeltaCrossSport() {
                   display: "flex", alignItems: "center", gap: "8px",
                   marginBottom: "6px",
                 }}>
+                  <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: P.accent, flexShrink: 0 }} />
                   <span style={{
-                    fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
-                    color: P.ochre, letterSpacing: "0.04em",
+                    fontSize: "11px",
+                    color: P.accent, letterSpacing: "0.04em",
                   }}>
                     CROSS-SPORT
                   </span>
                   <span style={{
-                    fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
+                    fontSize: "11px", fontStyle: "italic",
                     color: P.muted,
                   }}>
                     {article.type}
@@ -224,7 +213,7 @@ export default function DeltaCrossSport() {
                   fontStyle: "italic", fontSize: "26px", color: P.headline,
                   lineHeight: 1.2, marginBottom: "8px",
                   transition: "color 0.2s",
-                  ...(hovered === article.slug ? { color: P.ochre } : {}),
+                  ...(hovered === article.slug ? { color: P.accent } : {}),
                 }}>
                   {article.title}
                 </h3>
@@ -235,11 +224,18 @@ export default function DeltaCrossSport() {
 
               <div style={{
                 display: "flex", flexDirection: "column", alignItems: "flex-end",
-                gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "28px",
+                gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "20px",
               }}>
-                <GapScore score={article.gap} />
                 <span style={{
-                  fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontStyle: "italic",
+                  fontSize: "20px",
+                  color: P.accent,
+                }}>
+                  {article.gap}
+                </span>
+                <span style={{
+                  fontSize: "11px",
                   color: P.muted,
                 }}>
                   {article.date}

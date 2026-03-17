@@ -35,7 +35,7 @@ export function GapScore({ score, size = "default", palette = "green" }) {
     <span
       style={{
         fontSize: lg ? "14px" : "11px",
-        fontFamily: "'IBM Plex Mono', monospace",
+        fontFamily: "'Instrument Serif', Georgia, serif",
         fontWeight: 500,
         color: tier.text,
         background: tier.bg,
@@ -68,7 +68,7 @@ export function SportPill({ sport }) {
     <span
       style={{
         fontSize: "9px",
-        fontFamily: "'IBM Plex Mono', monospace",
+        fontFamily: "'Instrument Serif', Georgia, serif",
         letterSpacing: "0.05em",
         color,
         background: color + "14",
@@ -91,7 +91,7 @@ export function TypePill({ type, color }) {
     <span
       style={{
         fontSize: "9px",
-        fontFamily: "'IBM Plex Mono', monospace",
+        fontFamily: "'Instrument Serif', Georgia, serif",
         letterSpacing: "0.03em",
         color: c,
         background: c + "12",
@@ -140,7 +140,7 @@ export function ShirtIcon({ color, size = 28, number }) {
           style={{
             position: "absolute",
             fontSize: Math.round(size * 0.35) + "px",
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontWeight: 500,
             color: "#0a0a0a",
             top: "52%",
@@ -158,14 +158,21 @@ export function ShirtIcon({ color, size = 28, number }) {
 // ---------------------------------------------------------------------------
 // Delta Logo — the triangle
 // ---------------------------------------------------------------------------
-export function DeltaLogo({ color = "#6ec4d6", size = 20 }) {
+export function DeltaLogo({ bgColor = "#f8f9fb", size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32">
       <polygon
         points="16,3 29,27 3,27"
-        fill="none"
-        stroke={color}
+        fill="#6B5CA5"
+        fillOpacity="0.12"
+        stroke="#6B5CA5"
         strokeWidth="1.8"
+      />
+      <polygon
+        points="16,12 22,23 10,23"
+        fill={bgColor}
+        stroke="#9B8BD5"
+        strokeWidth="0.8"
       />
     </svg>
   );

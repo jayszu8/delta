@@ -1,24 +1,24 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const P = {
   bg: "#f8f9fb",
-  border: "#e2e5ea",
+  border: "#E4E2EA",
   headline: "#141618",
   body: "#3a3e44",
   caption: "#6a7078",
   muted: "#9aa0a8",
   faint: "#c0c4ca",
-  accent: "#2a6a9a",
-  football: "#1a7a5a",
-  f1: "#5a4a9a",
-  cross: "#8a6a20",
-  footballHoverBg: "#e6f4ee",
-  footballHoverBorder: "#b8dcc8",
-  f1HoverBg: "#eee8f8",
-  f1HoverBorder: "#d0c4e8",
-  crossHoverBg: "#f8f0dc",
-  crossHoverBorder: "#e0d4b0",
+  accent: "#6B5CA5",
+  football: "#6B5CA5",
+  f1: "#9B8BD5",
+  cross: "#4A3D7A",
+  footballHoverBg: "#F2F0F8",
+  footballHoverBorder: "#D8D4E4",
+  f1HoverBg: "#F4F2FA",
+  f1HoverBorder: "#E0DCF0",
+  crossHoverBg: "#EEEAF4",
+  crossHoverBorder: "#D0CCE0",
 };
 
 const articles = [
@@ -32,20 +32,7 @@ const articles = [
 
 const sportColor = (s) => s === "F1" ? P.f1 : s === "CROSS-SPORT" ? P.cross : P.football;
 
-function GapScore({ score }) {
-  const val = parseFloat(score);
-  const color = val >= 8.5 ? "#1a6a3a" : val >= 7.0 ? "#3a7a4a" : "#6a8a70";
-  return (
-    <span style={{
-      fontFamily: "'Instrument Serif', Georgia, serif",
-      fontStyle: "italic",
-      fontSize: "14px",
-      color,
-    }}>
-      {score}
-    </span>
-  );
-}
+// GapScore no longer used on Home — sport color applied directly inline
 
 function PolarBear({ size = 18, opacity = 0.6 }) {
   const s = size / 8;
@@ -76,189 +63,224 @@ function PolarBear({ size = 18, opacity = 0.6 }) {
   );
 }
 
-function WireframeSphere() {
-  const canvasRef = useRef(null);
-  const frameRef = useRef(0);
-  const animRef = useRef(null);
-
-  const buildGeometry = useCallback(() => {
-    const verts = [];
-    const edges = [];
-    const faces = [];
-    const latSteps = 12;
-    const lonSteps = 18;
-    const radius = 1;
-
-    // Generate vertices on a sphere
-    verts.push([0, radius, 0]); // north pole
-    for (let lat = 1; lat < latSteps; lat++) {
-      const theta = (Math.PI * lat) / latSteps;
-      const sinT = Math.sin(theta);
-      const cosT = Math.cos(theta);
-      for (let lon = 0; lon < lonSteps; lon++) {
-        const phi = (2 * Math.PI * lon) / lonSteps;
-        verts.push([radius * sinT * Math.cos(phi), radius * cosT, radius * sinT * Math.sin(phi)]);
-      }
-    }
-    verts.push([0, -radius, 0]); // south pole
-
-    const edgeSet = new Set();
-    const addEdge = (a, b) => {
-      const key = Math.min(a, b) + "," + Math.max(a, b);
-      if (!edgeSet.has(key)) { edgeSet.add(key); edges.push([a, b]); }
-    };
-
-    // North pole triangles
-    for (let lon = 0; lon < lonSteps; lon++) {
-      const a = 1 + lon;
-      const b = 1 + ((lon + 1) % lonSteps);
-      faces.push([0, a, b]);
-      addEdge(0, a); addEdge(0, b); addEdge(a, b);
-    }
-
-    // Middle bands — triangulated quads
-    for (let lat = 0; lat < latSteps - 2; lat++) {
-      for (let lon = 0; lon < lonSteps; lon++) {
-        const cur = 1 + lat * lonSteps + lon;
-        const next = 1 + lat * lonSteps + ((lon + 1) % lonSteps);
-        const below = 1 + (lat + 1) * lonSteps + lon;
-        const belowNext = 1 + (lat + 1) * lonSteps + ((lon + 1) % lonSteps);
-        faces.push([cur, below, next]);
-        faces.push([next, below, belowNext]);
-        addEdge(cur, next); addEdge(cur, below); addEdge(next, below);
-        addEdge(next, belowNext); addEdge(below, belowNext);
-      }
-    }
-
-    // South pole triangles
-    const southIdx = verts.length - 1;
-    const lastRingStart = 1 + (latSteps - 2) * lonSteps;
-    for (let lon = 0; lon < lonSteps; lon++) {
-      const a = lastRingStart + lon;
-      const b = lastRingStart + ((lon + 1) % lonSteps);
-      faces.push([southIdx, a, b]);
-      addEdge(southIdx, a); addEdge(southIdx, b); addEdge(a, b);
-    }
-
-    return { verts, edges };
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const { verts, edges } = buildGeometry();
-    const sportColors = ["#1a7a5a", "#5a4a9a", "#8a6a20"];
-    const brandBlue = "#2a6a9a";
-
-    let highlightEdges = [];
-    let highlightDecay = 0;
-
-    const render = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-
-      if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
-
-      ctx.clearRect(0, 0, w, h);
-
-      const frame = frameRef.current;
-      const rotY = frame * 0.004;
-      const rotX = frame * 0.0015;
-      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-
-      const scale = Math.min(w, h) * 0.38;
-      const cx = w / 2;
-      const cy = h / 2;
-
-      // Project vertices
-      const projected = verts.map(([x, y, z]) => {
-        // Rotate Y
-        let x1 = x * cosY - z * sinY;
-        let z1 = x * sinY + z * cosY;
-        // Rotate X
-        let y1 = y * cosX - z1 * sinX;
-        let z2 = y * sinX + z1 * cosX;
-        return [cx + x1 * scale, cy + y1 * scale, z2];
-      });
-
-      // Highlight pulse
-      if (frame % 60 === 0) {
-        const count = 3 + Math.floor(Math.random() * 5);
-        highlightEdges = [];
-        for (let i = 0; i < count; i++) {
-          highlightEdges.push(Math.floor(Math.random() * edges.length));
-        }
-        highlightDecay = 30;
-      }
-      if (highlightDecay > 0) highlightDecay--;
-
-      // Draw edges
-      ctx.lineWidth = 0.5;
-      edges.forEach(([a, b], idx) => {
-        const [x1, y1] = projected[a];
-        const [x2, y2] = projected[b];
-        const avgZ = (projected[a][2] + projected[b][2]) / 2;
-
-        // Cycle sport color based on edge index
-        const colorIdx = idx % 3;
-        let color = sportColors[colorIdx];
-        let alpha = 0.08 + (avgZ + 1) * 0.035; // 0.08–0.15 based on depth
-
-        // Highlight check
-        if (highlightDecay > 0 && highlightEdges.includes(idx)) {
-          color = brandBlue;
-          alpha = 0.30 * (highlightDecay / 30);
-        }
-
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = color;
-        ctx.globalAlpha = alpha;
-        ctx.stroke();
-      });
-
-      ctx.globalAlpha = 1;
-      frameRef.current++;
-      animRef.current = requestAnimationFrame(render);
-    };
-
-    animRef.current = requestAnimationFrame(render);
-    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
-  }, [buildGeometry]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "block",
-      }}
-    />
-  );
-}
-
 export default function DeltaHome() {
   const [hovered, setHovered] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const heroCanvasRef = useRef(null);
   useEffect(() => { setTimeout(() => setLoaded(true), 100); }, []);
+
+  useEffect(() => {
+    const canvas = heroCanvasRef.current;
+    if (!canvas || typeof window === "undefined") return undefined;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return undefined;
+
+    const stripeColors = [
+      "rgb(254,135,230)",
+      "rgb(191,200,252)",
+      "rgb(253,139,16)",
+      "rgb(129,93,245)",
+      "rgb(253,131,144)",
+      "rgb(252,129,226)",
+    ];
+    const asRgba = (rgb, alpha) => rgb.replace("rgb", "rgba").replace(")", `, ${alpha})`);
+
+    const bands = [
+      {
+        strands: 36,
+        spread: 265,
+        baseThickness: 2.05,
+        glowWidth: 9.8,
+        alphaCore: 0.22,
+        alphaGlow: 0.065,
+        laneInfluence: -0.7,
+        swayScale: 0.62,
+        rotationOffset: -0.1,
+        colorStart: stripeColors[1],
+        colorMid: stripeColors[3],
+        colorEnd: stripeColors[5],
+      },
+      {
+        // Orange centerline band.
+        strands: 32,
+        spread: 148,
+        baseThickness: 2.6,
+        glowWidth: 12.4,
+        alphaCore: 0.31,
+        alphaGlow: 0.095,
+        laneInfluence: 0.86,
+        swayScale: 0.5,
+        rotationOffset: 0.03,
+        colorStart: stripeColors[2],
+        colorMid: stripeColors[2],
+        colorEnd: stripeColors[4],
+      },
+      {
+        // Narrow, denser fold that reads as an inner tucked layer.
+        strands: 24,
+        spread: 92,
+        baseThickness: 1.9,
+        glowWidth: 8.4,
+        alphaCore: 0.28,
+        alphaGlow: 0.09,
+        laneInfluence: 0.92,
+        swayScale: 0.42,
+        rotationOffset: 0.16,
+        colorStart: stripeColors[4],
+        colorMid: stripeColors[2],
+        colorEnd: stripeColors[2],
+      },
+      {
+        strands: 34,
+        spread: 250,
+        baseThickness: 2,
+        glowWidth: 9.6,
+        alphaCore: 0.21,
+        alphaGlow: 0.062,
+        laneInfluence: 0.72,
+        swayScale: 0.58,
+        rotationOffset: 0.22,
+        colorStart: stripeColors[0],
+        colorMid: stripeColors[5],
+        colorEnd: stripeColors[3],
+      },
+    ];
+
+    let rafId = 0;
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const drawBand = (t, band, bandIndex, anchorX, anchorY, rotation) => {
+      const rotatePoint = (x, y) => {
+        const cos = Math.cos(rotation);
+        const sin = Math.sin(rotation);
+        return {
+          x: anchorX + x * cos - y * sin,
+          y: anchorY + x * sin + y * cos,
+        };
+      };
+
+      for (let i = 0; i < band.strands; i += 1) {
+        const v = band.strands > 1 ? i / (band.strands - 1) : 0.5;
+        const lane = (v - 0.5) * 2;
+        const laneOffset = lane * band.spread;
+        const pinch = 0.34 + Math.abs(lane) * 0.66;
+        const pinchedLaneOffset = laneOffset * pinch;
+        const sway =
+          Math.sin(t * 0.00016 * band.swayScale + i * 0.36 + bandIndex * 1.2) * 6 +
+          Math.sin(t * 0.00034 * band.swayScale + i * 0.17) * 2.2;
+
+        const sX = -width * 0.78 + laneOffset * 0.18;
+        const sY = -height * 0.9 + laneOffset * 0.58;
+        const c1X = -width * 0.2 + pinchedLaneOffset * (0.55 * band.laneInfluence) + sway;
+        const c1Y = -height * 0.5 + pinchedLaneOffset * 0.12;
+        const c2X = width * 0.23 - pinchedLaneOffset * (0.48 * band.laneInfluence) - sway * 0.75;
+        const c2Y = height * 0.14 + pinchedLaneOffset * 0.82;
+        const eX = width * 0.58 - laneOffset * 0.21;
+        const eY = height * 1.03 + laneOffset * 0.64;
+
+        const p0 = rotatePoint(sX, sY);
+        const p1 = rotatePoint(c1X, c1Y);
+        const p2 = rotatePoint(c2X, c2Y);
+        const p3 = rotatePoint(eX, eY);
+
+        const colorA = band.colorStart;
+        const colorB = band.colorMid;
+        const colorC = band.colorEnd;
+
+        const glow = ctx.createLinearGradient(p0.x, p0.y, p3.x, p3.y);
+        glow.addColorStop(0, asRgba(colorA, band.alphaGlow * 0.6));
+        glow.addColorStop(0.5, asRgba(colorB, band.alphaGlow * 1.12));
+        glow.addColorStop(1, asRgba(colorC, band.alphaGlow * 0.72));
+
+        const core = ctx.createLinearGradient(p0.x, p0.y, p3.x, p3.y);
+        core.addColorStop(0, asRgba(colorA, band.alphaCore * 0.72));
+        core.addColorStop(0.42, asRgba(colorB, band.alphaCore * 1.15));
+        core.addColorStop(0.72, asRgba(colorC, band.alphaCore * 0.82));
+        core.addColorStop(1, asRgba(colorC, band.alphaCore * 0.74));
+
+        const strandThickness = band.baseThickness + (1 - Math.abs(lane)) * 0.72;
+
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.globalCompositeOperation = "source-over";
+
+        ctx.strokeStyle = glow;
+        ctx.lineWidth = band.glowWidth + (1 - Math.abs(lane)) * 2;
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+        ctx.stroke();
+
+        ctx.strokeStyle = core;
+        ctx.lineWidth = strandThickness;
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+        ctx.stroke();
+      }
+    };
+
+    const render = (now) => {
+      ctx.clearRect(0, 0, width, height);
+
+      const t = now;
+      const anchorX =
+        width * 0.69 +
+        Math.sin(t * 0.00012) * width * 0.007 +
+        Math.sin(t * 0.00028) * width * 0.0025;
+      const anchorY =
+        height * 0.58 +
+        Math.cos(t * 0.00011) * height * 0.006 +
+        Math.sin(t * 0.00025) * height * 0.0022;
+
+      // Slow clockwise drift with tiny vibration to mimic Stripe's anchored motion.
+      const baseRotation =
+        0.21 +
+        t * 0.000007 +
+        Math.sin(t * 0.0001) * 0.024 +
+        Math.sin(t * 0.0002) * 0.007;
+
+      for (let i = 0; i < bands.length; i += 1) {
+        const bandRotation =
+          baseRotation +
+          bands[i].rotationOffset +
+          Math.sin(t * 0.00008 + i * 0.9) * 0.007;
+        drawBand(t, bands[i], i, anchorX, anchorY, bandRotation);
+      }
+
+      rafId = window.requestAnimationFrame(render);
+    };
+
+    resize();
+    rafId = window.requestAnimationFrame(render);
+    window.addEventListener("resize", resize);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
   const featured = articles[0];
   const rest = articles.slice(1);
 
   const sections = [
-    { label: "Football", desc: "Premier League, European cups", color: P.football, href: "/football", hoverBg: P.footballHoverBg, hoverBorder: P.footballHoverBorder },
-    { label: "Formula 1", desc: "Races, drivers, constructors", color: P.f1, href: "/f1", hoverBg: P.f1HoverBg, hoverBorder: P.f1HoverBorder },
-    { label: "Cross-sport", desc: "Where both worlds collide", color: P.cross, href: "/cross-sport", hoverBg: P.crossHoverBg, hoverBorder: P.crossHoverBorder },
+    { label: "Football", desc: "Premier League, European cups", count: "10 articles", color: P.football, href: "/football", hoverBg: P.footballHoverBg, hoverBorder: P.footballHoverBorder },
+    { label: "Formula 1", desc: "Races, drivers, constructors", count: "10 articles", color: P.f1, href: "/f1", hoverBg: P.f1HoverBg, hoverBorder: P.f1HoverBorder },
+    { label: "Cross-sport", desc: "Where both worlds collide", count: "4 articles", color: P.cross, href: "/cross-sport", hoverBg: P.crossHoverBg, hoverBorder: P.crossHoverBorder },
   ];
 
   return (
@@ -266,57 +288,118 @@ export default function DeltaHome() {
       background: P.bg, minHeight: "100vh",
       fontFamily: "'Instrument Serif', Georgia, serif",
       color: P.body,
+      position: "relative",
     }}>
-      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
       {/* Header */}
       <header style={{
+        position: "relative",
+        zIndex: 6,
         display: "flex", justifyContent: "space-between", alignItems: "center",
         padding: "20px 40px",
+        borderBottom: `0.5px solid ${P.border}`,
+        background: "linear-gradient(90deg, rgba(248,249,251,0.98) 0%, rgba(248,249,251,0.98) 62%, rgba(191,200,252,0.24) 74%, rgba(253,139,16,0.28) 86%, rgba(252,129,226,0.22) 100%)",
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.accent} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="#6B5CA5" fillOpacity="0.12" stroke="#6B5CA5" strokeWidth="1.8" />
+            <polygon points="16,12 22,23 10,23" fill="#f8f9fb" stroke="#9B8BD5" strokeWidth="0.8" />
           </svg>
           <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>
             Delta
           </span>
         </Link>
-        <nav style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
           {[
-            { label: "home", href: "/" },
-            { label: "football", href: "/football" },
-            { label: "formula 1", href: "/f1" },
-            { label: "cross-sport", href: "/cross-sport" },
-            { label: "methodology", href: "/methodology" },
-            { label: "about", href: "/about" },
+            { label: "Home", href: "/", variant: "light" },
+            { label: "Football", href: "/football", variant: "purple" },
+            { label: "Formula 1", href: "/f1", variant: "purple" },
+            { label: "Cross-Sport", href: "/cross-sport", variant: "purple" },
+            { label: "Methodology", href: "/methodology", variant: "purple" },
+            { label: "About", href: "/about", variant: "purple" },
           ].map((item) => (
             <Link key={item.label} href={item.href} style={{
-              fontSize: "13px", color: P.muted, cursor: "pointer",
-              textDecoration: "none", transition: "color 0.2s",
+              fontSize: "13px",
+              color: item.variant === "purple" ? "#ffffff" : "rgb(253,139,16)",
+              cursor: "pointer",
+              textDecoration: "none",
+              transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+              background: item.variant === "purple" ? "rgb(129,93,245)" : "#ffffff",
+              borderRadius: "8px",
+              padding: "7px 14px",
+              boxShadow:
+                item.variant === "purple"
+                  ? "0 0 0 1px rgba(129,93,245,0.92) inset"
+                  : "0 0 0 1px rgba(253,139,16,0.24) inset",
             }}
-            onMouseEnter={(e) => e.target.style.color = P.headline}
-            onMouseLeave={(e) => e.target.style.color = P.muted}
+            onMouseEnter={(e) => {
+              if (item.variant === "purple") {
+                e.currentTarget.style.background = "rgb(129,93,245)";
+                e.currentTarget.style.color = "#ffffff";
+                e.currentTarget.style.boxShadow = "0 0 0 1px rgba(129,93,245,0.96) inset";
+              } else {
+                e.currentTarget.style.background = "rgba(253,139,16,0.12)";
+                e.currentTarget.style.color = "rgb(253,139,16)";
+                e.currentTarget.style.boxShadow = "0 0 0 1px rgba(253,139,16,0.38) inset";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (item.variant === "purple") {
+                e.currentTarget.style.background = "rgb(129,93,245)";
+                e.currentTarget.style.color = "#ffffff";
+                e.currentTarget.style.boxShadow = "0 0 0 1px rgba(129,93,245,0.92) inset";
+              } else {
+                e.currentTarget.style.background = "#ffffff";
+                e.currentTarget.style.color = "rgb(253,139,16)";
+                e.currentTarget.style.boxShadow = "0 0 0 1px rgba(253,139,16,0.24) inset";
+              }
+            }}
             >
               {item.label}
             </Link>
           ))}
-          <PolarBear size={18} opacity={0.6} />
         </nav>
       </header>
 
       {/* Hero */}
       <section style={{
-        display: "flex",
-        alignItems: "center",
-        padding: "120px 40px 100px",
+        position: "relative",
+        minHeight: "620px",
+        overflow: "visible",
       }}>
-        <div style={{ maxWidth: "480px", flexShrink: 0 }}>
+        <div className="hero-canvas-wrap" style={{
+          position: "absolute",
+          right: "-16%",
+          top: "-20%",
+          width: "86%",
+          height: "116%",
+          zIndex: 1,
+          pointerEvents: "none",
+          clipPath: "polygon(34% 0%, 100% 0%, 100% 100%, 22% 100%)",
+        }}>
+          <canvas
+            ref={heroCanvasRef}
+            aria-hidden="true"
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "block",
+            }}
+          />
+        </div>
+
+        {/* Headline text */}
+        <div style={{
+          position: "relative", zIndex: 2,
+          padding: "120px 40px 100px",
+          maxWidth: "480px",
+        }}>
           <p style={{
             fontStyle: "italic",
-            fontSize: "52px",
+            fontSize: "56px",
             color: P.headline,
-            lineHeight: 1.15,
+            lineHeight: 1.1,
             opacity: loaded ? 1 : 0,
             transform: loaded ? "none" : "translateY(16px)",
             transition: "all 0.8s ease-out",
@@ -340,17 +423,10 @@ export default function DeltaHome() {
             the data actually shows.
           </p>
         </div>
-        <div className="hero-sphere" style={{
-          flex: 1,
-          minWidth: 0,
-          height: "360px",
-          marginLeft: "40px",
-        }}>
-          <WireframeSphere />
-        </div>
+
         <style>{`
           @media (max-width: 768px) {
-            .hero-sphere { display: none !important; }
+            .hero-canvas-wrap { display: none !important; }
           }
         `}</style>
       </section>
@@ -361,8 +437,8 @@ export default function DeltaHome() {
         maxWidth: "900px",
       }}>
         <div style={{
-          fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-          color: P.muted, letterSpacing: "0.08em",
+          fontSize: "11px", fontFamily: "'Instrument Serif', Georgia, serif",
+          color: P.muted, letterSpacing: "0.06em",
           marginBottom: "32px",
         }}>
           FEATURED
@@ -381,42 +457,66 @@ export default function DeltaHome() {
             display: "flex", alignItems: "center", gap: "10px",
             marginBottom: "14px",
           }}>
+            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: sportColor(featured.sport), flexShrink: 0 }} />
             <span style={{
-              fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
+              fontSize: "11px",
               color: sportColor(featured.sport), letterSpacing: "0.04em",
             }}>
               {featured.sport}
             </span>
-            <span style={{ color: P.faint, fontSize: "11px" }}>
+            <span style={{ color: P.faint, fontSize: "11px", fontStyle: "italic" }}>
               {featured.type}
             </span>
           </div>
 
-          <h2 style={{
-            fontStyle: "italic", fontSize: "38px", color: P.headline,
-            lineHeight: 1.15, marginBottom: "12px",
-            transition: "color 0.2s",
-            ...(hovered === featured.slug ? { color: sportColor(featured.sport) } : {}),
-          }}>
-            {featured.title}
-          </h2>
-
-          <p style={{
-            fontSize: "17px", color: P.caption, lineHeight: 1.6,
-            maxWidth: "560px",
-          }}>
-            {featured.subtitle}
-          </p>
-
-          <div style={{
-            display: "flex", alignItems: "center", gap: "12px",
-            marginTop: "16px",
-          }}>
-            <GapScore score={featured.gap} />
-            <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: P.faint }} />
-            <span style={{ fontSize: "12px", color: P.muted, fontFamily: "'IBM Plex Mono', monospace" }}>
-              {featured.date}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "20px" }}>
+            <span style={{
+              fontFamily: "'Instrument Serif', Georgia, serif",
+              fontStyle: "italic",
+              fontSize: "36px",
+              color: sportColor(featured.sport),
+              lineHeight: 1,
+              flexShrink: 0,
+              paddingTop: "4px",
+            }}>
+              {featured.gap}
             </span>
+            <div>
+              <h2 style={{
+                fontStyle: "italic", fontSize: "38px", color: P.headline,
+                lineHeight: 1.15, marginBottom: "12px",
+                transition: "color 0.2s",
+                ...(hovered === featured.slug ? { color: sportColor(featured.sport) } : {}),
+              }}>
+                {featured.title}
+              </h2>
+
+              <p style={{
+                fontSize: "17px", color: P.caption, lineHeight: 1.6,
+                maxWidth: "560px",
+              }}>
+                {featured.subtitle}
+              </p>
+
+              {/* Gap bar */}
+              <div style={{
+                marginTop: "16px",
+                width: "200px", height: "3px",
+                background: P.border, borderRadius: "1.5px",
+                overflow: "hidden",
+              }}>
+                <div style={{
+                  width: `${(parseFloat(featured.gap) / 10) * 100}%`,
+                  height: "100%",
+                  background: sportColor(featured.sport),
+                  borderRadius: "1.5px",
+                }} />
+              </div>
+
+              <span style={{ fontSize: "11px", color: P.muted, marginTop: "12px", display: "inline-block" }}>
+                {featured.date}
+              </span>
+            </div>
           </div>
         </Link>
       </section>
@@ -433,8 +533,8 @@ export default function DeltaHome() {
         maxWidth: "900px",
       }}>
         <div style={{
-          fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-          color: P.muted, letterSpacing: "0.08em",
+          fontSize: "11px", fontFamily: "'Instrument Serif', Georgia, serif",
+          color: P.muted, letterSpacing: "0.06em",
           marginBottom: "40px",
         }}>
           RECENT
@@ -463,18 +563,35 @@ export default function DeltaHome() {
                   display: "flex", alignItems: "center", gap: "8px",
                   marginBottom: "8px",
                 }}>
+                  <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: sportColor(article.sport), flexShrink: 0 }} />
                   <span style={{
-                    fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
+                    fontSize: "11px",
                     color: sportColor(article.sport), letterSpacing: "0.04em",
                   }}>
                     {article.sport}
                   </span>
                   <span style={{
-                    fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
+                    fontSize: "11px", fontStyle: "italic",
                     color: P.faint,
                   }}>
                     {article.type}
                   </span>
+                  {i === 2 && (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", marginLeft: "4px" }}>
+                      <svg width="14" height="14" viewBox="0 0 8 8" style={{ opacity: 0.7 }}>
+                        <rect x="1" y="0" width="1" height="1" fill="#e0e8f0" stroke="#a8b8c8" strokeWidth="0.2" />
+                        <rect x="5" y="0" width="1" height="1" fill="#e0e8f0" stroke="#a8b8c8" strokeWidth="0.2" />
+                        <rect x="1" y="1" width="6" height="4.5" fill="#e0e8f0" stroke="#a8b8c8" strokeWidth="0.2" rx="0.3" />
+                        <rect x="2.5" y="2.8" width="0.8" height="0.8" fill="#4a5a6a" />
+                        <rect x="4.7" y="2.8" width="0.8" height="0.8" fill="#4a5a6a" />
+                        <rect x="1.5" y="5.5" width="1.2" height="1.5" fill="#e0e8f0" stroke="#a8b8c8" strokeWidth="0.2" />
+                        <rect x="4.7" y="5.5" width="1.2" height="1.5" fill="#e0e8f0" stroke="#a8b8c8" strokeWidth="0.2" />
+                      </svg>
+                      <span style={{ fontSize: "10px", fontStyle: "italic", color: "#9aa0a8" }}>
+                        {"Pip's pick"}
+                      </span>
+                    </span>
+                  )}
                 </div>
                 <h3 style={{
                   fontStyle: "italic", fontSize: "24px", color: P.headline,
@@ -493,11 +610,18 @@ export default function DeltaHome() {
 
               <div style={{
                 display: "flex", flexDirection: "column", alignItems: "flex-end",
-                gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "24px",
+                gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "20px",
               }}>
-                <GapScore score={article.gap} />
                 <span style={{
-                  fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontStyle: "italic",
+                  fontSize: "20px",
+                  color: sportColor(article.sport),
+                }}>
+                  {article.gap}
+                </span>
+                <span style={{
+                  fontSize: "11px",
                   color: P.muted,
                 }}>
                   {article.date}
@@ -524,22 +648,27 @@ export default function DeltaHome() {
               padding: "20px",
               borderRadius: "10px",
               border: `0.5px solid ${P.border}`,
-              transition: "background 0.2s, border-color 0.2s",
+              borderLeft: "2px solid transparent",
+              transition: "background 0.2s, border-color 0.2s, border-left-color 0.2s",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = section.hoverBg;
               e.currentTarget.style.borderColor = section.hoverBorder;
+              e.currentTarget.style.borderLeftColor = section.color;
+              e.currentTarget.querySelector(".section-arrow").style.opacity = "1";
               e.currentTarget.querySelector("h4").style.color = section.color;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "transparent";
               e.currentTarget.style.borderColor = P.border;
+              e.currentTarget.style.borderLeftColor = "transparent";
+              e.currentTarget.querySelector(".section-arrow").style.opacity = "0";
               e.currentTarget.querySelector("h4").style.color = P.headline;
             }}
           >
             <div style={{
-              width: "24px", height: "2px", background: section.color,
-              marginBottom: "14px", borderRadius: "1px",
+              width: "28px", height: "3px", background: section.color,
+              marginBottom: "14px", borderRadius: "1.5px",
               opacity: 0.6,
             }} />
             <h4 style={{
@@ -547,9 +676,23 @@ export default function DeltaHome() {
               marginBottom: "4px", transition: "color 0.2s",
             }}>
               {section.label}
+              <span className="section-arrow" style={{
+                marginLeft: "8px",
+                opacity: 0,
+                transition: "opacity 0.2s",
+                fontSize: "16px",
+              }}>→</span>
             </h4>
             <p style={{ fontSize: "13px", color: P.muted }}>
               {section.desc}
+            </p>
+            <p style={{
+              fontSize: "11px", fontStyle: "italic",
+              color: section.color,
+              opacity: 0.6,
+              marginTop: "8px",
+            }}>
+              {section.count}
             </p>
           </Link>
         ))}

@@ -2,23 +2,23 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  bg: "#f5f4f8",
-  surface: "#eae8f2",
-  border: "#dcd8ea",
-  headline: "#1a1830",
-  body: "#3a3450",
-  muted: "#6a6480",
-  violet: "#5a4a9a",
-  sectorPurple: "#7a5ac0",
-  sectorGreen: "#3a9a5a",
-  sectorYellow: "#b09030",
+  bg: "#F9F8FC",
+  surface: "#F2F0F8",
+  border: "#E0DCF0",
+  headline: "#141618",
+  body: "#3a3e44",
+  muted: "#6a7078",
+  violet: "#9B8BD5",
+  sectorS1: "#6B5CA5",
+  sectorS2: "#9B8BD5",
+  sectorS3: "#4A3D7A",
 };
 
-const sectorColor = { S1: P.sectorPurple, S2: P.sectorGreen, S3: P.sectorYellow };
+const sectorColor = { S1: P.sectorS1, S2: P.sectorS2, S3: P.sectorS3 };
 const sectorLabel = { S1: "Data essays", S2: "Profiles", S3: "Recaps + sims" };
 
 const gridPosColor = (pos) =>
-  pos <= 2 ? "#5a4a9a" : pos <= 4 ? "#7a6aaa" : pos <= 6 ? "#9a8aba" : "#a0a0b0";
+  pos <= 2 ? "#9B8BD5" : pos <= 4 ? "rgba(155,139,213,0.7)" : pos <= 6 ? "rgba(155,139,213,0.4)" : "#a0a0b0";
 
 const articles = [
   { slug: "street-circuits", pos: 1, sector: "S1", type: "DATA ESSAY", title: "Street circuits don't produce better racing", subtitle: "DRS overtakes on street vs. permanent venues, adjusted for track length, era, and field spread.", date: "10 Mar", gap: 9.4 },
@@ -31,20 +31,7 @@ const articles = [
   { slug: "australia-quali", pos: 8, sector: "S3", type: "RECAP", title: "Australia 2026: Qualifying report", subtitle: "Sector-by-sector analysis of Russell's pole lap.", date: "08 Mar", gap: 4.8 },
 ];
 
-function GapScore({ score }) {
-  const val = parseFloat(score);
-  const color = val >= 8.5 ? "#4a2a8a" : val >= 7.0 ? "#6a4aaa" : "#8a80a0";
-  return (
-    <span style={{
-      fontFamily: "'Instrument Serif', Georgia, serif",
-      fontStyle: "italic",
-      fontSize: "14px",
-      color,
-    }}>
-      {score}
-    </span>
-  );
-}
+// GapScore rendered inline with P.violet color
 
 export default function DeltaF1() {
   const [hovered, setHovered] = useState(null);
@@ -57,7 +44,7 @@ export default function DeltaF1() {
       fontFamily: "'Instrument Serif', Georgia, serif",
       color: P.body,
     }}>
-      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
       {/* Header */}
       <header style={{
@@ -66,7 +53,8 @@ export default function DeltaF1() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.violet} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="#6B5CA5" fillOpacity="0.12" stroke="#6B5CA5" strokeWidth="1.8" />
+            <polygon points="16,12 22,23 10,23" fill="#F9F8FC" stroke="#9B8BD5" strokeWidth="0.8" />
           </svg>
           <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
           <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
@@ -85,7 +73,7 @@ export default function DeltaF1() {
               fontSize: "13px", color: P.muted, cursor: "pointer",
               textDecoration: "none", transition: "color 0.2s",
             }}
-            onMouseEnter={(e) => e.target.style.color = P.headline}
+            onMouseEnter={(e) => e.target.style.color = "#6B5CA5"}
             onMouseLeave={(e) => e.target.style.color = P.muted}
             >
               {item.label}
@@ -162,8 +150,8 @@ export default function DeltaF1() {
         maxWidth: "900px",
       }}>
         <div style={{
-          fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-          color: P.muted, letterSpacing: "0.08em",
+          fontSize: "11px", fontFamily: "'Instrument Serif', Georgia, serif",
+          color: P.muted, letterSpacing: "0.06em",
           marginBottom: "28px",
         }}>
           STARTING GRID
@@ -188,11 +176,11 @@ export default function DeltaF1() {
               textAlign: "right", paddingTop: "4px",
             }}>
               <span style={{
-                fontFamily: "'IBM Plex Mono', monospace",
+                fontFamily: "'Instrument Serif', Georgia, serif",
                 fontSize: "18px", fontWeight: 500,
                 color: gridPosColor(article.pos),
               }}>
-                {article.pos}
+                P{article.pos}
               </span>
             </div>
 
@@ -209,21 +197,22 @@ export default function DeltaF1() {
                 display: "flex", alignItems: "center", gap: "8px",
                 marginBottom: "6px",
               }}>
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: sectorColor[article.sector], flexShrink: 0 }} />
                 <span style={{
-                  fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: "10px", letterSpacing: "0.04em",
                   color: sectorColor[article.sector],
                 }}>
                   {article.sector}
                 </span>
                 <span style={{
-                  fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: "11px", fontStyle: "italic",
                   color: P.muted,
                 }}>
                   {article.type}
                 </span>
               </div>
               <h3 style={{
-                fontStyle: "italic", fontSize: "22px", color: P.headline,
+                fontStyle: "italic", fontSize: "24px", color: P.headline,
                 lineHeight: 1.25, marginBottom: "6px",
                 transition: "color 0.2s",
                 ...(hovered === article.slug ? { color: P.violet } : {}),
@@ -238,11 +227,18 @@ export default function DeltaF1() {
             {/* Gap + date */}
             <div style={{
               display: "flex", flexDirection: "column", alignItems: "flex-end",
-              gap: "6px", flexShrink: 0, paddingTop: "24px", marginLeft: "20px",
+              gap: "6px", flexShrink: 0, paddingTop: "20px", marginLeft: "20px",
             }}>
-              <GapScore score={article.gap} />
               <span style={{
-                fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontStyle: "italic",
+                fontSize: "20px",
+                color: P.violet,
+              }}>
+                {article.gap}
+              </span>
+              <span style={{
+                fontSize: "11px",
                 color: P.muted,
               }}>
                 {article.date}
