@@ -1,23 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { DeltaLogo } from "@/components/shared";
+
+const P = {
+  bg: "#f8f9fb",
+  headline: "#141618",
+  body: "#3a3e44",
+  section: "#2a2e34",
+  muted: "#6a7078",
+  border: "#e2e5ea",
+  accent: "#2a6a9a",
+  faint: "#9aa0a8",
+};
 
 export default function MethodologyPage() {
   return (
-    <div style={{ background: "#0a1628", minHeight: "100vh", fontFamily: "'Instrument Serif', Georgia, serif", color: "#e8ecf0" }}>
+    <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Instrument Serif', Georgia, serif", color: P.body }}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       <header style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        padding: "14px 32px", borderBottom: "0.5px solid #1a2d4e",
+        padding: "20px 40px",
       }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-          <DeltaLogo color="#6ec4d6" size={20} />
-          <span style={{ fontStyle: "italic", fontSize: "22px", color: "#f4f6f8" }}>Delta</span>
-          <span style={{ fontSize: "11px", color: "#5a6a7e", fontFamily: "'IBM Plex Mono', monospace", marginLeft: "4px" }}>/ methodology</span>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+          <svg width="18" height="18" viewBox="0 0 32 32">
+            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.accent} strokeWidth="1.8" />
+          </svg>
+          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
+          <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
+          <span style={{ fontSize: "12px", color: P.body }}>methodology</span>
         </Link>
-        <nav style={{ display: "flex", gap: "16px" }}>
+        <nav style={{ display: "flex", gap: "28px" }}>
           {[
             { label: "home", href: "/" },
             { label: "football", href: "/football" },
@@ -26,18 +39,26 @@ export default function MethodologyPage() {
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "11px", color: "#8494a8", textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "13px", color: P.muted, textDecoration: "none",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => e.target.style.color = P.accent}
+            onMouseLeave={(e) => e.target.style.color = P.muted}
+            >
+              {item.label}
+            </Link>
           ))}
         </nav>
       </header>
 
       <section style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 32px" }}>
-        <h1 style={{ fontStyle: "italic", fontSize: "42px", color: "#f4f6f8", marginBottom: "24px" }}>
+        <h1 style={{ fontStyle: "italic", fontSize: "42px", color: P.headline, marginBottom: "24px" }}>
           Methodology
         </h1>
 
-        <div style={{ fontSize: "16px", color: "#8494a8", lineHeight: 1.75 }}>
-          <h2 style={{ fontStyle: "italic", fontSize: "24px", color: "#e8ecf0", marginTop: "40px", marginBottom: "12px" }}>
+        <div style={{ fontSize: "16px", color: P.body, lineHeight: 1.75 }}>
+          <h2 style={{ fontStyle: "italic", fontSize: "24px", color: P.section, marginTop: "40px", marginBottom: "12px" }}>
             The Gap Score
           </h2>
           <p style={{ marginBottom: "16px" }}>
@@ -47,7 +68,7 @@ export default function MethodologyPage() {
             The score is derived from three inputs: the predicted direction of the narrative's claim, the actual effect size measured in the data, and whether the real direction matches or opposes the claim. Opposite-direction findings receive a multiplier, because a narrative that's not just wrong but backwards is a bigger gap than one that's merely exaggerated.
           </p>
 
-          <h2 style={{ fontStyle: "italic", fontSize: "24px", color: "#e8ecf0", marginTop: "40px", marginBottom: "12px" }}>
+          <h2 style={{ fontStyle: "italic", fontSize: "24px", color: P.section, marginTop: "40px", marginBottom: "12px" }}>
             Data sources
           </h2>
           <p style={{ marginBottom: "16px" }}>
@@ -57,7 +78,7 @@ export default function MethodologyPage() {
             Every article cites its specific sources, and where possible, the underlying data and methodology are made available for scrutiny. Transparency is not optional — it's what separates analysis from opinion.
           </p>
 
-          <h2 style={{ fontStyle: "italic", fontSize: "24px", color: "#e8ecf0", marginTop: "40px", marginBottom: "12px" }}>
+          <h2 style={{ fontStyle: "italic", fontSize: "24px", color: P.section, marginTop: "40px", marginBottom: "12px" }}>
             Limitations
           </h2>
           <p>
@@ -65,6 +86,28 @@ export default function MethodologyPage() {
           </p>
         </div>
       </section>
+
+      <footer style={{
+        padding: "24px 40px",
+        borderTop: `0.5px solid ${P.border}`,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+      }}>
+        <Link href="/" style={{ fontSize: "12px", color: P.muted, fontStyle: "italic", textDecoration: "none" }}>
+          Delta
+        </Link>
+        <div style={{ display: "flex", gap: "24px" }}>
+          {[
+            { label: "methodology", href: "/methodology" },
+            { label: "about", href: "/about" },
+          ].map((item) => (
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "12px", color: P.muted, textDecoration: "none",
+            }}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </footer>
     </div>
   );
 }

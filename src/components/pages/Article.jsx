@@ -2,30 +2,25 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  // Light reading background
   pageBg: "#fafaf8",
   cardBg: "#ffffff",
   surfaceBg: "#f4f3f0",
   borderLight: "#e8e6e0",
   borderMid: "#d8d6d0",
-  // Dark header zone
-  headerBg: "#0a1628",
-  headerBorder: "#1a2d4e",
-  // Sport accents (applied dynamically)
-  football: { primary: "#1a7a6a", light: "#e8f4f0", border: "#c0e0d8", dark: "#0a4a3e", pill: "#4a9aad" },
-  f1: { primary: "#7a4aaa", light: "#f0e8f8", border: "#d8c8e8", dark: "#4a2a6a", pill: "#9a6adc" },
-  crossSport: { primary: "#8a6a2a", light: "#f8f0e0", border: "#e8d8b8", dark: "#5a4418", pill: "#d4a44e" },
+  // Light header
+  headerBg: "#f8f9fb",
+  headerBorder: "#e2e5ea",
+  navText: "#6a7078",
+  // Sport accents
+  football: { primary: "#1a7a5a", light: "#e6f4ee", border: "#b8dcc8", dark: "#0a4a3a" },
+  f1: { primary: "#5a4a9a", light: "#eee8f8", border: "#ccc0e4", dark: "#3a2a6a" },
+  crossSport: { primary: "#8a6a20", light: "#f8f0dc", border: "#e0d0a8", dark: "#5a4418" },
   // Text
   black: "#1a1a18",
   darkGray: "#2a2a28",
-  bodyText: "#3a3a38",
-  caption: "#6a6a68",
-  muted: "#9a9a98",
-  // Greens for gap score
-  gapHigh: "#1a5a34",
-  gapHighText: "#2a8a4e",
-  gapMid: "#2a6a3a",
-  gapMidText: "#3a8a4e",
+  bodyText: "#3a3e44",
+  caption: "#6a7078",
+  muted: "#9aa0a8",
 };
 
 // Sample article data (would come from articles.js in real app)
@@ -54,16 +49,17 @@ function GapScoreBlock({ score, sport }) {
     <div style={{
       display: "flex", alignItems: "center", gap: "12px",
       padding: "14px 18px",
-      background: P.surfaceBg,
-      border: `0.5px solid ${P.borderLight}`,
+      background: accent.light,
+      border: `0.5px solid ${accent.border}`,
       borderRadius: "12px",
     }}>
       <div style={{
         width: "48px", height: "48px", borderRadius: "12px",
-        background: accent.light, border: `0.5px solid ${accent.border}`,
+        background: P.cardBg, border: `0.5px solid ${accent.border}`,
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontFamily: "'IBM Plex Mono', monospace",
-        fontSize: "20px", fontWeight: 500, color: accent.primary,
+        fontFamily: "'Instrument Serif', Georgia, serif",
+        fontStyle: "italic",
+        fontSize: "20px", color: accent.primary,
       }}>
         {score}
       </div>
@@ -163,13 +159,10 @@ function ChartPlaceholder({ accent }) {
       borderRadius: "12px",
       textAlign: "center",
     }}>
-      {/* Simplified radar/pizza chart mockup */}
       <svg width="280" height="280" viewBox="0 0 280 280" style={{ margin: "0 auto", display: "block" }}>
-        {/* Background circles */}
         {[120, 90, 60, 30].map((r) => (
           <circle key={r} cx="140" cy="140" r={r} fill="none" stroke={P.borderLight} strokeWidth="0.5" />
         ))}
-        {/* Axis lines */}
         {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
           const rad = (angle * Math.PI) / 180;
           return (
@@ -180,23 +173,15 @@ function ChartPlaceholder({ accent }) {
             />
           );
         })}
-        {/* Data polygon */}
         <polygon
           points={[
-            [140, 30],   // top - 92%
-            [228, 68],   // top-right - 75%
-            [248, 140],  // right - 90%
-            [210, 220],  // bottom-right - 60%
-            [140, 240],  // bottom - 83%
-            [80, 210],   // bottom-left - 55%
-            [40, 140],   // left - 82%
-            [78, 62],    // top-left - 78%
+            [140, 30], [228, 68], [248, 140], [210, 220],
+            [140, 240], [80, 210], [40, 140], [78, 62],
           ].map((p) => p.join(",")).join(" ")}
           fill={accent.primary + "20"}
           stroke={accent.primary}
           strokeWidth="1.5"
         />
-        {/* Data points */}
         {[
           [140, 30], [228, 68], [248, 140], [210, 220],
           [140, 240], [80, 210], [40, 140], [78, 62],
@@ -285,7 +270,7 @@ export default function DeltaArticle() {
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
-      {/* Dark header bar */}
+      {/* Light header bar */}
       <header style={{
         background: P.headerBg,
         borderBottom: `0.5px solid ${P.headerBorder}`,
@@ -294,10 +279,10 @@ export default function DeltaArticle() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={accent.pill} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="none" stroke={accent.primary} strokeWidth="1.8" />
           </svg>
           <span style={{
-            fontStyle: "italic", fontSize: "20px", color: "#f4f6f8", lineHeight: 1,
+            fontStyle: "italic", fontSize: "20px", color: P.black, lineHeight: 1,
           }}>
             Delta
           </span>
@@ -311,12 +296,20 @@ export default function DeltaArticle() {
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "11px", color: "#8494a8", textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "11px", color: P.navText, textDecoration: "none",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => e.target.style.color = P.black}
+            onMouseLeave={(e) => e.target.style.color = P.navText}
+            >
+              {item.label}
+            </Link>
           ))}
         </nav>
       </header>
 
-      {/* Article header — clean, high contrast, Athletic-inspired */}
+      {/* Article header */}
       <div style={{
         maxWidth: "720px",
         margin: "0 auto",
@@ -347,7 +340,7 @@ export default function DeltaArticle() {
           </span>
         </div>
 
-        {/* Title — big, bold serif, black on light */}
+        {/* Title */}
         <h1 style={{
           fontSize: "48px",
           fontWeight: 400,
@@ -387,7 +380,6 @@ export default function DeltaArticle() {
           transition: "all 0.6s ease-out 0.15s",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {/* Author icon — Delta triangle in a circle */}
             <div style={{
               width: "36px", height: "36px", borderRadius: "50%",
               background: P.black, display: "flex", alignItems: "center", justifyContent: "center",
@@ -434,7 +426,6 @@ export default function DeltaArticle() {
         margin: "0 auto",
         padding: "0 24px 80px",
       }}>
-        {/* Intro paragraphs */}
         <p style={{
           fontSize: "18px", color: P.bodyText, lineHeight: 1.8,
           marginBottom: "20px",
@@ -449,7 +440,6 @@ export default function DeltaArticle() {
           But what does the data actually say?
         </p>
 
-        {/* Section heading */}
         <h2 style={{
           fontSize: "28px", fontStyle: "italic", color: P.black,
           marginTop: "40px", marginBottom: "16px", lineHeight: 1.2,
@@ -464,7 +454,6 @@ export default function DeltaArticle() {
           I pulled every Premier League club that moved stadiums since 2000 and tracked their league position, points-per-game, and home win percentage for three seasons before and three seasons after the move. To control for squad quality, I normalized results against each club's wage bill relative to the league average.
         </p>
 
-        {/* Embedded data table */}
         <DataTable />
 
         <p style={{
@@ -474,13 +463,11 @@ export default function DeltaArticle() {
           The pattern is striking. In the first two seasons after a stadium move, home win percentage drops by an average of 8.3 percentage points — even after controlling for squad spend.
         </p>
 
-        {/* Pull quote */}
         <PullQuote
           text="The new ground doesn't produce better results. It produces bigger expectations that take years to grow into."
           accent={accent}
         />
 
-        {/* Section heading */}
         <h2 style={{
           fontSize: "28px", fontStyle: "italic", color: P.black,
           marginTop: "40px", marginBottom: "16px", lineHeight: 1.2,
@@ -495,10 +482,8 @@ export default function DeltaArticle() {
           Three factors emerge from the data. The familiarity deficit — teams lose the accumulated tactical knowledge of their old ground. The revenue lag — increased matchday income takes 2-3 seasons to translate into squad improvement. And expectation inflation — fans, media, and boards expect the new stadium to produce immediate results.
         </p>
 
-        {/* Embedded chart */}
         <ChartPlaceholder accent={accent} />
 
-        {/* Callout box */}
         <Callout
           label="Key finding"
           text="Arsenal, West Ham, and Tottenham all experienced a home win percentage drop of 7-10 percentage points in the first two seasons after moving. Brighton and Leicester — who moved from significantly smaller grounds — are the exceptions that prove the rule."
@@ -550,7 +535,7 @@ export default function DeltaArticle() {
           </p>
         </div>
 
-        {/* Author sign-off — Athletic-inspired icon */}
+        {/* Author sign-off */}
         <div style={{
           marginTop: "32px", paddingTop: "24px",
           borderTop: `0.5px solid ${P.borderLight}`,
@@ -606,8 +591,9 @@ export default function DeltaArticle() {
                   width: "36px", height: "36px", borderRadius: "8px",
                   background: relAccent.light, border: `0.5px solid ${relAccent.border}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "'IBM Plex Mono', monospace",
-                  fontSize: "12px", fontWeight: 500, color: relAccent.primary,
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontStyle: "italic",
+                  fontSize: "12px", color: relAccent.primary,
                   flexShrink: 0,
                 }}>
                   {related.gap}

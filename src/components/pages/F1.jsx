@@ -2,29 +2,23 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  bg: "#0c0c10",
-  surface: "#121216",
-  border: "#222230",
-  borderHover: "#33334a",
-  purple: "#9a6adc",
-  purpleLight: "#b48af0",
-  purpleBright: "#c8a4ff",
-  pink: "#dc6ab0",
-  pinkLight: "#f08ad0",
-  teal: "#4acad4",
-  tealLight: "#6ae0ea",
-  sectorPurple: "#a060e0",
-  sectorGreen: "#40c060",
-  sectorYellow: "#d4c040",
-  kerbRed: "#d44040",
-  white: "#f4f6f8",
-  offWhite: "#d0d0d8",
-  slate: "#8080a0",
-  slateMuted: "#505068",
+  bg: "#f5f4f8",
+  surface: "#eae8f2",
+  border: "#dcd8ea",
+  headline: "#1a1830",
+  body: "#3a3450",
+  muted: "#6a6480",
+  violet: "#5a4a9a",
+  sectorPurple: "#7a5ac0",
+  sectorGreen: "#3a9a5a",
+  sectorYellow: "#b09030",
 };
 
 const sectorColor = { S1: P.sectorPurple, S2: P.sectorGreen, S3: P.sectorYellow };
 const sectorLabel = { S1: "Data essays", S2: "Profiles", S3: "Recaps + sims" };
+
+const gridPosColor = (pos) =>
+  pos <= 2 ? "#5a4a9a" : pos <= 4 ? "#7a6aaa" : pos <= 6 ? "#9a8aba" : "#a0a0b0";
 
 const articles = [
   { slug: "street-circuits", pos: 1, sector: "S1", type: "DATA ESSAY", title: "Street circuits don't produce better racing", subtitle: "DRS overtakes on street vs. permanent venues, adjusted for track length, era, and field spread.", date: "10 Mar", gap: 9.4 },
@@ -37,7 +31,22 @@ const articles = [
   { slug: "australia-quali", pos: 8, sector: "S3", type: "RECAP", title: "Australia 2026: Qualifying report", subtitle: "Sector-by-sector analysis of Russell's pole lap.", date: "08 Mar", gap: 4.8 },
 ];
 
-export default function DeltaF1V2() {
+function GapScore({ score }) {
+  const val = parseFloat(score);
+  const color = val >= 8.5 ? "#4a2a8a" : val >= 7.0 ? "#6a4aaa" : "#8a80a0";
+  return (
+    <span style={{
+      fontFamily: "'Instrument Serif', Georgia, serif",
+      fontStyle: "italic",
+      fontSize: "14px",
+      color,
+    }}>
+      {score}
+    </span>
+  );
+}
+
+export default function DeltaF1() {
   const [hovered, setHovered] = useState(null);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 100); }, []);
@@ -46,7 +55,7 @@ export default function DeltaF1V2() {
     <div style={{
       background: P.bg, minHeight: "100vh",
       fontFamily: "'Instrument Serif', Georgia, serif",
-      color: P.offWhite,
+      color: P.body,
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
@@ -57,11 +66,11 @@ export default function DeltaF1V2() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.purpleLight} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.violet} strokeWidth="1.8" />
           </svg>
-          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.white }}>Delta</span>
-          <span style={{ fontSize: "12px", color: P.slateMuted, marginLeft: "4px" }}>/</span>
-          <span style={{ fontSize: "12px", color: P.slate }}>formula 1</span>
+          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
+          <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
+          <span style={{ fontSize: "12px", color: P.body }}>formula 1</span>
         </Link>
         <nav style={{ display: "flex", gap: "28px" }}>
           {[
@@ -72,7 +81,13 @@ export default function DeltaF1V2() {
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "13px", color: P.slate, cursor: "pointer", textDecoration: "none" }}>
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "13px", color: P.muted, cursor: "pointer",
+              textDecoration: "none", transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => e.target.style.color = P.headline}
+            onMouseLeave={(e) => e.target.style.color = P.muted}
+            >
               {item.label}
             </Link>
           ))}
@@ -93,15 +108,15 @@ export default function DeltaF1V2() {
           {[1, 2, 3, 4, 5].map((i) => (
             <span key={i} style={{
               width: "8px", height: "8px", borderRadius: "50%",
-              background: P.kerbRed,
-              opacity: loaded ? (i <= 3 ? 0.8 : 0.15) : 0.1,
-              transition: `opacity 0.4s ease ${i * 0.12}s`,
+              background: loaded && i <= 3 ? "#d8b0b0" : "#e0d0d0",
+              opacity: loaded ? (i <= 3 ? 0.9 : 0.4) : 0.3,
+              transition: `all 0.4s ease ${i * 0.12}s`,
             }} />
           ))}
         </div>
 
         <h1 style={{
-          fontStyle: "italic", fontSize: "44px", color: P.white,
+          fontStyle: "italic", fontSize: "44px", color: P.headline,
           lineHeight: 1.15, marginBottom: "16px",
           opacity: loaded ? 1 : 0,
           transform: loaded ? "none" : "translateY(12px)",
@@ -110,7 +125,7 @@ export default function DeltaF1V2() {
           Formula 1
         </h1>
         <p style={{
-          fontSize: "17px", color: P.slate, lineHeight: 1.6,
+          fontSize: "17px", color: P.muted, lineHeight: 1.6,
           maxWidth: "440px",
           opacity: loaded ? 1 : 0,
           transform: loaded ? "none" : "translateY(8px)",
@@ -121,7 +136,7 @@ export default function DeltaF1V2() {
           the back of the grid is race coverage.
         </p>
 
-        {/* Sector key — quiet */}
+        {/* Sector key */}
         <div style={{
           display: "flex", gap: "20px", marginTop: "24px",
           opacity: loaded ? 1 : 0,
@@ -133,7 +148,7 @@ export default function DeltaF1V2() {
                 width: "8px", height: "3px", borderRadius: "1px",
                 background: sectorColor[s], opacity: 0.7,
               }} />
-              <span style={{ fontSize: "11px", color: P.slateMuted }}>
+              <span style={{ fontSize: "11px", color: P.muted }}>
                 {sectorLabel[s]}
               </span>
             </div>
@@ -141,21 +156,21 @@ export default function DeltaF1V2() {
         </div>
       </section>
 
-      {/* Grid — clean list with position numbers */}
+      {/* Grid list */}
       <section style={{
         padding: "0 40px 100px",
         maxWidth: "900px",
       }}>
         <div style={{
           fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-          color: P.slateMuted, letterSpacing: "0.08em",
+          color: P.muted, letterSpacing: "0.08em",
           marginBottom: "28px",
         }}>
           STARTING GRID
         </div>
 
-        {articles.map((article, i) => (
-          <a
+        {articles.map((article) => (
+          <Link
             key={article.slug}
             href={`/articles/${article.slug}`}
             onMouseEnter={() => setHovered(article.slug)}
@@ -175,11 +190,7 @@ export default function DeltaF1V2() {
               <span style={{
                 fontFamily: "'IBM Plex Mono', monospace",
                 fontSize: "18px", fontWeight: 500,
-                color: article.pos <= 2 ? P.purpleBright
-                  : article.pos <= 4 ? P.pinkLight
-                  : article.pos <= 6 ? P.tealLight
-                  : P.slate,
-                opacity: 0.8,
+                color: gridPosColor(article.pos),
               }}>
                 {article.pos}
               </span>
@@ -206,20 +217,20 @@ export default function DeltaF1V2() {
                 </span>
                 <span style={{
                   fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
-                  color: P.slateMuted,
+                  color: P.muted,
                 }}>
                   {article.type}
                 </span>
               </div>
               <h3 style={{
-                fontStyle: "italic", fontSize: "22px", color: P.white,
+                fontStyle: "italic", fontSize: "22px", color: P.headline,
                 lineHeight: 1.25, marginBottom: "6px",
                 transition: "color 0.2s",
-                ...(hovered === article.slug ? { color: P.purpleLight } : {}),
+                ...(hovered === article.slug ? { color: P.violet } : {}),
               }}>
                 {article.title}
               </h3>
-              <p style={{ fontSize: "14px", color: P.slate, lineHeight: 1.5 }}>
+              <p style={{ fontSize: "14px", color: P.muted, lineHeight: 1.5 }}>
                 {article.subtitle}
               </p>
             </div>
@@ -229,21 +240,15 @@ export default function DeltaF1V2() {
               display: "flex", flexDirection: "column", alignItems: "flex-end",
               gap: "6px", flexShrink: 0, paddingTop: "24px", marginLeft: "20px",
             }}>
-              <span style={{
-                fontFamily: "'IBM Plex Mono', monospace", fontSize: "12px", fontWeight: 500,
-                color: parseFloat(article.gap) >= 8.5 ? P.purpleBright
-                  : parseFloat(article.gap) >= 7.0 ? P.purpleLight : P.slate,
-              }}>
-                {article.gap}
-              </span>
+              <GapScore score={article.gap} />
               <span style={{
                 fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-                color: P.slateMuted,
+                color: P.muted,
               }}>
                 {article.date}
               </span>
             </div>
-          </a>
+          </Link>
         ))}
       </section>
 
@@ -253,13 +258,13 @@ export default function DeltaF1V2() {
         borderTop: `0.5px solid ${P.border}`,
         display: "flex", justifyContent: "space-between", alignItems: "center",
       }}>
-        <Link href="/" style={{ fontSize: "12px", color: P.slateMuted, fontStyle: "italic", textDecoration: "none" }}>Delta</Link>
+        <Link href="/" style={{ fontSize: "12px", color: P.muted, fontStyle: "italic", textDecoration: "none" }}>Delta</Link>
         <div style={{ display: "flex", gap: "24px" }}>
           {[
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "12px", color: P.slateMuted, textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{ fontSize: "12px", color: P.muted, textDecoration: "none" }}>{item.label}</Link>
           ))}
         </div>
       </footer>

@@ -2,20 +2,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  bg: "#0e0c08",
-  surface: "#141208",
-  border: "#242016",
-  borderHover: "#3a3420",
-  amber: "#d4a44e",
-  amberLight: "#ecc06a",
-  teal: "#4a9aad",
-  tealLight: "#6ec4d6",
-  pink: "#d4a0c4",
-  pinkLight: "#e8bcd8",
-  white: "#f4f6f8",
-  offWhite: "#d8d4cc",
-  slate: "#908880",
-  slateMuted: "#5a5448",
+  bg: "#f8f6f2",
+  surface: "#f0ece2",
+  border: "#e4dcc8",
+  headline: "#2a2418",
+  body: "#4a4030",
+  muted: "#8a7a58",
+  ochre: "#8a6a20",
+  football: "#1a7a5a",
+  f1: "#5a4a9a",
 };
 
 const articles = [
@@ -53,7 +48,22 @@ const articles = [
   },
 ];
 
-export default function DeltaCrossSportV2() {
+function GapScore({ score }) {
+  const val = parseFloat(score);
+  const color = val >= 8.5 ? "#4a6a20" : val >= 7.0 ? "#6a7a30" : "#8a8a60";
+  return (
+    <span style={{
+      fontFamily: "'Instrument Serif', Georgia, serif",
+      fontStyle: "italic",
+      fontSize: "14px",
+      color,
+    }}>
+      {score}
+    </span>
+  );
+}
+
+export default function DeltaCrossSport() {
   const [hovered, setHovered] = useState(null);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 100); }, []);
@@ -62,7 +72,7 @@ export default function DeltaCrossSportV2() {
     <div style={{
       background: P.bg, minHeight: "100vh",
       fontFamily: "'Instrument Serif', Georgia, serif",
-      color: P.offWhite,
+      color: P.body,
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
@@ -73,11 +83,11 @@ export default function DeltaCrossSportV2() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.amberLight} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.ochre} strokeWidth="1.8" />
           </svg>
-          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.white }}>Delta</span>
-          <span style={{ fontSize: "12px", color: P.slateMuted, marginLeft: "4px" }}>/</span>
-          <span style={{ fontSize: "12px", color: P.slate }}>cross-sport</span>
+          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
+          <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
+          <span style={{ fontSize: "12px", color: P.body }}>cross-sport</span>
         </Link>
         <nav style={{ display: "flex", gap: "28px" }}>
           {[
@@ -88,7 +98,15 @@ export default function DeltaCrossSportV2() {
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "13px", color: P.slate, cursor: "pointer", textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "13px", color: P.muted, cursor: "pointer",
+              textDecoration: "none", transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => e.target.style.color = P.headline}
+            onMouseLeave={(e) => e.target.style.color = P.muted}
+            >
+              {item.label}
+            </Link>
           ))}
         </nav>
       </header>
@@ -105,13 +123,13 @@ export default function DeltaCrossSportV2() {
           opacity: loaded ? 1 : 0,
           transition: "opacity 0.6s ease-out",
         }}>
-          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: P.tealLight, opacity: 0.6 }} />
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: P.football, opacity: 0.6 }} />
           <div style={{ width: "24px", height: "0.5px", background: P.border }} />
-          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: P.pinkLight, opacity: 0.6 }} />
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: P.f1, opacity: 0.6 }} />
         </div>
 
         <h1 style={{
-          fontStyle: "italic", fontSize: "44px", color: P.white,
+          fontStyle: "italic", fontSize: "44px", color: P.headline,
           lineHeight: 1.15, marginBottom: "16px",
           opacity: loaded ? 1 : 0,
           transform: loaded ? "none" : "translateY(12px)",
@@ -120,7 +138,7 @@ export default function DeltaCrossSportV2() {
           Cross-sport
         </h1>
         <p style={{
-          fontSize: "17px", color: P.slate, lineHeight: 1.6,
+          fontSize: "17px", color: P.muted, lineHeight: 1.6,
           maxWidth: "460px",
           opacity: loaded ? 1 : 0,
           transform: loaded ? "none" : "translateY(8px)",
@@ -138,7 +156,7 @@ export default function DeltaCrossSportV2() {
         maxWidth: "900px",
       }}>
         {articles.map((article, i) => (
-          <a
+          <Link
             key={article.slug}
             href={`/articles/${article.slug}`}
             onMouseEnter={() => setHovered(article.slug)}
@@ -151,30 +169,30 @@ export default function DeltaCrossSportV2() {
               textDecoration: "none", cursor: "pointer",
             }}
           >
-            {/* Comparison line — the split, minimal */}
+            {/* Comparison line */}
             <div style={{
               display: "flex", alignItems: "center", gap: "12px",
               marginBottom: "16px",
             }}>
               <span style={{
                 fontSize: "12px", fontStyle: "italic",
-                color: P.tealLight, opacity: 0.7,
+                color: P.football, opacity: 0.8,
               }}>
                 {article.left}
               </span>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <div style={{ width: "16px", height: "0.5px", background: P.tealLight, opacity: 0.3 }} />
+                <div style={{ width: "16px", height: "0.5px", background: P.football, opacity: 0.25 }} />
                 <span style={{
                   fontFamily: "'IBM Plex Mono', monospace",
-                  fontSize: "9px", color: P.amber, letterSpacing: "0.06em",
+                  fontSize: "9px", color: P.ochre, letterSpacing: "0.06em",
                 }}>
                   VS
                 </span>
-                <div style={{ width: "16px", height: "0.5px", background: P.pinkLight, opacity: 0.3 }} />
+                <div style={{ width: "16px", height: "0.5px", background: P.f1, opacity: 0.25 }} />
               </div>
               <span style={{
                 fontSize: "12px", fontStyle: "italic",
-                color: P.pinkLight, opacity: 0.7,
+                color: P.f1, opacity: 0.8,
               }}>
                 {article.right}
               </span>
@@ -191,26 +209,26 @@ export default function DeltaCrossSportV2() {
                 }}>
                   <span style={{
                     fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
-                    color: P.amber, letterSpacing: "0.04em",
+                    color: P.ochre, letterSpacing: "0.04em",
                   }}>
                     CROSS-SPORT
                   </span>
                   <span style={{
                     fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
-                    color: P.slateMuted,
+                    color: P.muted,
                   }}>
                     {article.type}
                   </span>
                 </div>
                 <h3 style={{
-                  fontStyle: "italic", fontSize: "26px", color: P.white,
+                  fontStyle: "italic", fontSize: "26px", color: P.headline,
                   lineHeight: 1.2, marginBottom: "8px",
                   transition: "color 0.2s",
-                  ...(hovered === article.slug ? { color: P.amberLight } : {}),
+                  ...(hovered === article.slug ? { color: P.ochre } : {}),
                 }}>
                   {article.title}
                 </h3>
-                <p style={{ fontSize: "15px", color: P.slate, lineHeight: 1.55 }}>
+                <p style={{ fontSize: "15px", color: P.muted, lineHeight: 1.55 }}>
                   {article.subtitle}
                 </p>
               </div>
@@ -219,21 +237,16 @@ export default function DeltaCrossSportV2() {
                 display: "flex", flexDirection: "column", alignItems: "flex-end",
                 gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "28px",
               }}>
-                <span style={{
-                  fontFamily: "'IBM Plex Mono', monospace", fontSize: "12px", fontWeight: 500,
-                  color: parseFloat(article.gap) >= 8.5 ? P.amberLight : P.amber,
-                }}>
-                  {article.gap}
-                </span>
+                <GapScore score={article.gap} />
                 <span style={{
                   fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-                  color: P.slateMuted,
+                  color: P.muted,
                 }}>
                   {article.date}
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         ))}
       </section>
 
@@ -243,13 +256,13 @@ export default function DeltaCrossSportV2() {
         borderTop: `0.5px solid ${P.border}`,
         display: "flex", justifyContent: "space-between", alignItems: "center",
       }}>
-        <Link href="/" style={{ fontSize: "12px", color: P.slateMuted, fontStyle: "italic", textDecoration: "none" }}>Delta</Link>
+        <Link href="/" style={{ fontSize: "12px", color: P.muted, fontStyle: "italic", textDecoration: "none" }}>Delta</Link>
         <div style={{ display: "flex", gap: "24px" }}>
           {[
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "12px", color: P.slateMuted, textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{ fontSize: "12px", color: P.muted, textDecoration: "none" }}>{item.label}</Link>
           ))}
         </div>
       </footer>

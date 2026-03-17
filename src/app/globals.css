@@ -28,15 +28,10 @@
   --slate-muted: #5a6a7e;
 }
 
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body {
   font-family: var(--font-serif);
-  color: var(--off-white);
-  background: #0a1628;
+  color: #3a3e44;
+  background: #f8f9fb;
   line-height: 1.6;
 }
 
@@ -54,15 +49,15 @@ a {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a3a;
+  background: #c0c4ca;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a4a;
+  background: #a0a4aa;
 }
 
 /* Selection color */
 ::selection {
-  background: #6ec4d644;
-  color: #f4f6f8;
+  background: #2a6a9a22;
+  color: #141618;
 }

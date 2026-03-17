@@ -18,7 +18,20 @@ npm run build      # Production build
 - **Charts:** Recharts (interactive visualizations in articles)
 - **Data pipeline:** Python scripts in `data-pipeline/scripts/`
 
-## Design System
+## Design System — "Arctic Light" Palette
+
+Light-mode design. No dark backgrounds.
+
+### Core Palette
+
+| Token       | Hex         | Usage                          |
+|-------------|-------------|--------------------------------|
+| Background  | `#f8f9fb`   | Default page background        |
+| Headlines   | `#141618`   | Headings, titles               |
+| Body text   | `#3a3e44`   | Paragraph text                 |
+| Muted text  | `#9aa0a8`   | Captions, secondary labels     |
+| Borders     | `#e2e5ea`   | Dividers, card borders         |
+| Brand accent| `#2a6a9a`   | Links, brand highlights        |
 
 ### Typography
 
@@ -26,24 +39,28 @@ npm run build      # Production build
 |------------|------------------|--------------|------------------------------------|
 | Headlines  | Instrument Serif | 400 italic   | Article titles, section headings   |
 | Body       | Instrument Serif | 400 regular  | Article text, subtitles            |
-| Data       | IBM Plex Mono    | 400, 500     | Dates, tags, Gap Scores, stats     |
+| Data       | IBM Plex Mono    | 400, 500     | Dates, tags, stats                 |
 | Notes      | Caveat           | 400          | Handwritten-style notes ONLY       |
 
 ### Sport Colors (use consistently everywhere)
 
-- **Football:** teal `#4a9aad`
-- **F1:** pink `#d4a0c4`
-- **Cross-sport:** amber `#d4a44e`
+- **Football:** green `#1a7a5a`
+- **F1:** purple `#5a4a9a`
+- **Cross-sport:** gold `#8a6a20`
 
 ### Page Backgrounds
 
-| Page        | Background            | Accent          | Layout metaphor          |
-|-------------|-----------------------|-----------------|--------------------------|
-| Home        | `#0a1628` (navy)      | `#6ec4d6` teal  | Editorial grid           |
-| Football    | `#0e2818` (green)     | `#6ec4d6` teal  | FM-style 4-2-3-1 formation |
-| F1          | `#0e0e12` (carbon)    | `#b48af0` purple | Starting grid, purple/pink timing colors |
-| Cross-sport | amber-toned           | `#d4a44e` amber | Split field              |
-| Articles    | light off-white       | varies by sport | Reading layout           |
+| Page        | Background            | Layout metaphor              |
+|-------------|-----------------------|------------------------------|
+| Home        | `#f8f9fb`             | Editorial grid               |
+| Football    | `#f4f8f5` (green tint)| FM-style 4-2-3-1 formation  |
+| F1          | `#f5f4f8` (purple tint)| Starting grid               |
+| Cross-sport | `#f8f6f2` (warm tint) | Split field                  |
+| Articles    | `#fafaf8` (off-white) | Reading layout               |
+
+### Mascot
+
+A tiny pixel-art polar bear appears in the header and footer on every page.
 
 ## Project Structure
 
@@ -64,4 +81,4 @@ npm run build      # Production build
 
 ## Key Concept: Gap Score
 
-A manually assigned score representing the data insight gap in each article. Displayed using the GapScore component from `src/components/shared.jsx`.
+A manually assigned score representing the data insight gap in each article. Displayed as green italic numbers (Instrument Serif), not monospace badges.

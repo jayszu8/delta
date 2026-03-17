@@ -2,28 +2,24 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const P = {
-  bg: "#0c1e10",
-  surface: "#101f14",
-  border: "#1a3420",
-  borderHover: "#2a4a30",
-  pitchLine: "#1e4028",
-  teal: "#4a9aad",
-  tealLight: "#6ec4d6",
-  amber: "#d4a44e",
-  amberLight: "#ecc06a",
-  green: "#5aaa6e",
-  greenBright: "#72cc88",
-  white: "#f4f6f8",
-  offWhite: "#d0d8d2",
-  slate: "#7a8e80",
-  slateMuted: "#4e6454",
+  bg: "#f4f8f5",
+  surface: "#e8f0ea",
+  border: "#d4e4d8",
+  headline: "#142a1e",
+  body: "#3a5a44",
+  muted: "#5a7a64",
+  teal: "#1a7a5a",
+  pitchLine: "#d4e4d8",
+  posAttack: "#c8956a",
+  posMidfield: "#58a06a",
+  posDefence: "#8aaa90",
 };
 
 const typeColor = {
-  "DATA ESSAY": P.tealLight,
-  PROFILE: "#b0a0d8",
-  RECAP: "#d4a0c4",
-  SIMULATION: "#d4786a",
+  "DATA ESSAY": "#1a7a5a",
+  PROFILE: "#6a5a9a",
+  RECAP: "#9a5a7a",
+  SIMULATION: "#9a5a3a",
 };
 
 const articles = [
@@ -46,7 +42,24 @@ const lineLabels = {
   defence: { label: "Defence", desc: "Recaps, archive" },
 };
 
-export default function DeltaFootballV2() {
+const posColor = { attack: P.posAttack, midfield: P.posMidfield, defence: P.posDefence };
+
+function GapScore({ score }) {
+  const val = parseFloat(score);
+  const color = val >= 8.5 ? "#1a6a3a" : val >= 7.0 ? "#3a7a4a" : "#6a8a70";
+  return (
+    <span style={{
+      fontFamily: "'Instrument Serif', Georgia, serif",
+      fontStyle: "italic",
+      fontSize: "14px",
+      color,
+    }}>
+      {score}
+    </span>
+  );
+}
+
+export default function DeltaFootball() {
   const [hovered, setHovered] = useState(null);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 100); }, []);
@@ -55,14 +68,14 @@ export default function DeltaFootballV2() {
     <div style={{
       background: P.bg, minHeight: "100vh",
       fontFamily: "'Instrument Serif', Georgia, serif",
-      color: P.offWhite, position: "relative",
+      color: P.body, position: "relative",
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400&display=swap" rel="stylesheet" />
 
-      {/* Pitch markings — barely there */}
+      {/* Pitch markings */}
       <svg style={{
         position: "fixed", inset: 0, width: "100%", height: "100%",
-        pointerEvents: "none", zIndex: 0, opacity: 0.08,
+        pointerEvents: "none", zIndex: 0, opacity: 0.10,
       }} preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 1400">
         <rect x="50" y="50" width="900" height="1300" rx="8" fill="none" stroke={P.pitchLine} strokeWidth="1" />
         <line x1="50" y1="700" x2="950" y2="700" stroke={P.pitchLine} strokeWidth="0.8" />
@@ -77,11 +90,11 @@ export default function DeltaFootballV2() {
       }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 32 32">
-            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.tealLight} strokeWidth="1.8" />
+            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.teal} strokeWidth="1.8" />
           </svg>
-          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.white }}>Delta</span>
-          <span style={{ fontSize: "12px", color: P.slateMuted, marginLeft: "4px" }}>/</span>
-          <span style={{ fontSize: "12px", color: P.slate }}>football</span>
+          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
+          <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
+          <span style={{ fontSize: "12px", color: P.body }}>football</span>
         </Link>
         <nav style={{ display: "flex", gap: "28px" }}>
           {[
@@ -92,7 +105,13 @@ export default function DeltaFootballV2() {
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "13px", color: P.slate, cursor: "pointer", textDecoration: "none" }}>
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "13px", color: P.muted, cursor: "pointer",
+              textDecoration: "none", transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => e.target.style.color = P.headline}
+            onMouseLeave={(e) => e.target.style.color = P.muted}
+            >
               {item.label}
             </Link>
           ))}
@@ -107,7 +126,7 @@ export default function DeltaFootballV2() {
       }}>
         <div style={{
           fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: "11px", color: P.greenBright, letterSpacing: "0.06em",
+          fontSize: "11px", color: P.teal, letterSpacing: "0.06em",
           marginBottom: "16px",
           opacity: loaded ? 0.7 : 0,
           transition: "opacity 0.6s ease-out",
@@ -115,7 +134,7 @@ export default function DeltaFootballV2() {
           4-2-3-1
         </div>
         <h1 style={{
-          fontStyle: "italic", fontSize: "44px", color: P.white,
+          fontStyle: "italic", fontSize: "44px", color: P.headline,
           lineHeight: 1.15, marginBottom: "16px",
           opacity: loaded ? 1 : 0,
           transform: loaded ? "none" : "translateY(12px)",
@@ -124,7 +143,7 @@ export default function DeltaFootballV2() {
           Football
         </h1>
         <p style={{
-          fontSize: "17px", color: P.slate, lineHeight: 1.6,
+          fontSize: "17px", color: P.muted, lineHeight: 1.6,
           maxWidth: "440px",
           opacity: loaded ? 1 : 0,
           transform: loaded ? "none" : "translateY(8px)",
@@ -151,19 +170,19 @@ export default function DeltaFootballV2() {
             }}>
               <span style={{
                 fontFamily: "'IBM Plex Mono', monospace",
-                fontSize: "10px", color: P.slateMuted, letterSpacing: "0.08em",
+                fontSize: "10px", color: P.muted, letterSpacing: "0.08em",
               }}>
                 {lineLabels[line].label.toUpperCase()}
               </span>
               <div style={{ flex: 1, height: "0.5px", background: P.border }} />
-              <span style={{ fontSize: "12px", color: P.slateMuted, fontStyle: "italic" }}>
+              <span style={{ fontSize: "12px", color: P.muted, fontStyle: "italic" }}>
                 {lineLabels[line].desc}
               </span>
             </div>
 
             {/* Articles in this line */}
             {lines[line].map((article, i) => (
-              <a
+              <Link
                 key={article.slug}
                 href={`/articles/${article.slug}`}
                 onMouseEnter={() => setHovered(article.slug)}
@@ -186,28 +205,28 @@ export default function DeltaFootballV2() {
                       <span style={{
                         fontFamily: "'IBM Plex Mono', monospace",
                         fontSize: "10px", fontWeight: 500,
-                        color: P.bg,
-                        background: line === "attack" ? P.amberLight : line === "midfield" ? P.greenBright : P.slate,
+                        color: "#ffffff",
+                        background: posColor[line],
                         padding: "1px 6px", borderRadius: "3px",
                       }}>
                         {article.pos}
                       </span>
                       <span style={{
                         fontSize: "10px", fontFamily: "'IBM Plex Mono', monospace",
-                        color: typeColor[article.type] || P.slate,
+                        color: typeColor[article.type] || P.muted,
                       }}>
                         {article.type}
                       </span>
                     </div>
                     <h3 style={{
-                      fontStyle: "italic", fontSize: "24px", color: P.white,
+                      fontStyle: "italic", fontSize: "24px", color: P.headline,
                       lineHeight: 1.25, marginBottom: "6px",
                       transition: "color 0.2s",
-                      ...(hovered === article.slug ? { color: P.tealLight } : {}),
+                      ...(hovered === article.slug ? { color: P.teal } : {}),
                     }}>
                       {article.title}
                     </h3>
-                    <p style={{ fontSize: "14px", color: P.slate, lineHeight: 1.55 }}>
+                    <p style={{ fontSize: "14px", color: P.muted, lineHeight: 1.55 }}>
                       {article.subtitle}
                     </p>
                   </div>
@@ -216,21 +235,16 @@ export default function DeltaFootballV2() {
                     display: "flex", flexDirection: "column", alignItems: "flex-end",
                     gap: "6px", marginLeft: "40px", flexShrink: 0, paddingTop: "24px",
                   }}>
-                    <span style={{
-                      fontFamily: "'IBM Plex Mono', monospace", fontSize: "12px", fontWeight: 500,
-                      color: parseFloat(article.gap) >= 8.5 ? "#80e8a0" : parseFloat(article.gap) >= 7.0 ? "#60c880" : P.tealLight,
-                    }}>
-                      {article.gap}
-                    </span>
+                    <GapScore score={article.gap} />
                     <span style={{
                       fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace",
-                      color: P.slateMuted,
+                      color: P.muted,
                     }}>
                       {article.date}
                     </span>
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         ))}
@@ -243,13 +257,13 @@ export default function DeltaFootballV2() {
         display: "flex", justifyContent: "space-between", alignItems: "center",
         position: "relative", zIndex: 5,
       }}>
-        <Link href="/" style={{ fontSize: "12px", color: P.slateMuted, fontStyle: "italic", textDecoration: "none" }}>Delta</Link>
+        <Link href="/" style={{ fontSize: "12px", color: P.muted, fontStyle: "italic", textDecoration: "none" }}>Delta</Link>
         <div style={{ display: "flex", gap: "24px" }}>
           {[
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "12px", color: P.slateMuted, textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{ fontSize: "12px", color: P.muted, textDecoration: "none" }}>{item.label}</Link>
           ))}
         </div>
       </footer>

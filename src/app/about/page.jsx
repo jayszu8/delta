@@ -1,23 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { DeltaLogo } from "@/components/shared";
+
+const P = {
+  bg: "#f8f9fb",
+  headline: "#141618",
+  body: "#3a3e44",
+  section: "#2a2e34",
+  muted: "#6a7078",
+  border: "#e2e5ea",
+  accent: "#2a6a9a",
+  faint: "#9aa0a8",
+};
 
 export default function AboutPage() {
   return (
-    <div style={{ background: "#0a1628", minHeight: "100vh", fontFamily: "'Instrument Serif', Georgia, serif", color: "#e8ecf0" }}>
+    <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Instrument Serif', Georgia, serif", color: P.body }}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       <header style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        padding: "14px 32px", borderBottom: "0.5px solid #1a2d4e",
+        padding: "20px 40px",
       }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-          <DeltaLogo color="#6ec4d6" size={20} />
-          <span style={{ fontStyle: "italic", fontSize: "22px", color: "#f4f6f8" }}>Delta</span>
-          <span style={{ fontSize: "11px", color: "#5a6a7e", fontFamily: "'IBM Plex Mono', monospace", marginLeft: "4px" }}>/ about</span>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+          <svg width="18" height="18" viewBox="0 0 32 32">
+            <polygon points="16,3 29,27 3,27" fill="none" stroke={P.accent} strokeWidth="1.8" />
+          </svg>
+          <span style={{ fontStyle: "italic", fontSize: "22px", color: P.headline }}>Delta</span>
+          <span style={{ fontSize: "12px", color: P.muted, marginLeft: "4px" }}>/</span>
+          <span style={{ fontSize: "12px", color: P.body }}>about</span>
         </Link>
-        <nav style={{ display: "flex", gap: "16px" }}>
+        <nav style={{ display: "flex", gap: "28px" }}>
           {[
             { label: "home", href: "/" },
             { label: "football", href: "/football" },
@@ -26,18 +39,26 @@ export default function AboutPage() {
             { label: "methodology", href: "/methodology" },
             { label: "about", href: "/about" },
           ].map((item) => (
-            <Link key={item.label} href={item.href} style={{ fontSize: "11px", color: "#8494a8", textDecoration: "none" }}>{item.label}</Link>
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "13px", color: P.muted, textDecoration: "none",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => e.target.style.color = P.accent}
+            onMouseLeave={(e) => e.target.style.color = P.muted}
+            >
+              {item.label}
+            </Link>
           ))}
         </nav>
       </header>
 
       <section style={{ maxWidth: "720px", margin: "0 auto", padding: "60px 32px" }}>
-        <h1 style={{ fontStyle: "italic", fontSize: "42px", color: "#f4f6f8", marginBottom: "24px" }}>
+        <h1 style={{ fontStyle: "italic", fontSize: "42px", color: P.headline, marginBottom: "24px" }}>
           About Delta
         </h1>
 
-        <div style={{ fontSize: "16px", color: "#8494a8", lineHeight: 1.75 }}>
-          <p style={{ marginBottom: "16px", fontSize: "18px", color: "#c0c8d0" }}>
+        <div style={{ fontSize: "16px", color: P.body, lineHeight: 1.75 }}>
+          <p style={{ marginBottom: "16px", fontSize: "18px", color: P.section }}>
             Sports narratives are built on repetition, not evidence. Delta takes the claims everyone repeats — about teams, drivers, tactics, and transfers — and tests them against what the data actually shows.
           </p>
 
@@ -55,14 +76,36 @@ export default function AboutPage() {
 
           <div style={{
             marginTop: "40px", paddingTop: "24px",
-            borderTop: "0.5px solid #1a2d4e",
+            borderTop: `0.5px solid ${P.border}`,
           }}>
-            <p style={{ fontSize: "14px", color: "#5a6a7e" }}>
+            <p style={{ fontSize: "14px", color: P.muted }}>
               Built with Next.js. Data processed in Python. Hosted on Vercel.
             </p>
           </div>
         </div>
       </section>
+
+      <footer style={{
+        padding: "24px 40px",
+        borderTop: `0.5px solid ${P.border}`,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+      }}>
+        <Link href="/" style={{ fontSize: "12px", color: P.muted, fontStyle: "italic", textDecoration: "none" }}>
+          Delta
+        </Link>
+        <div style={{ display: "flex", gap: "24px" }}>
+          {[
+            { label: "methodology", href: "/methodology" },
+            { label: "about", href: "/about" },
+          ].map((item) => (
+            <Link key={item.label} href={item.href} style={{
+              fontSize: "12px", color: P.muted, textDecoration: "none",
+            }}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </footer>
     </div>
   );
 }

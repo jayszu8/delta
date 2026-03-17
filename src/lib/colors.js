@@ -1,5 +1,5 @@
 // =============================================================================
-// DELTA — Color System
+// DELTA — Color System (Arctic Light Palette)
 // =============================================================================
 // Every color in the project lives here. Import what you need:
 //   import { home, football, f1, shared } from "@/lib/colors"
@@ -7,101 +7,99 @@
 
 // Shared across all pages
 export const shared = {
-  white: "#f4f6f8",
-  offWhite: "#e8ecf0",
-  slate: "#8494a8",
-  slateMuted: "#5a6a7e",
-  slateDark: "#3e4e62",
+  white: "#f8f9fb",
+  offWhite: "#f0f2f5",
+  slate: "#6a7078",
+  slateMuted: "#9aa0a8",
+  slateDark: "#c0c4ca",
 
   // Sport accent colors (used in pills, tags, hover states)
-  sportFootball: "#4a9aad",
-  sportF1: "#d4a0c4",
-  sportCross: "#d4a44e",
+  sportFootball: "#1a7a5a",
+  sportF1: "#5a4a9a",
+  sportCross: "#8a6a20",
 
   // Content type colors
-  typeEssay: "#6ec4d6",
-  typeProfile: "#8a7ac4",
-  typeRecap: "#d4a0c4",
-  typeSimulation: "#d4786a",
-  typeRating: "#d4a44e",
+  typeEssay: "#1a7a5a",
+  typeProfile: "#5a4a9a",
+  typeRecap: "#8a5a7a",
+  typeSimulation: "#9a5a3a",
+  typeRating: "#8a6a20",
 
-  // Gap Score colors
-  gapHigh: "#5aaa6e",
-  gapMid: "#2a7a42",
-  gapLow: "#2a6a7a",
+  // Gap Score colors (green Instrument Serif italic)
+  gapHigh: "#1a6a3a",
+  gapMid: "#3a7a4a",
+  gapLow: "#6a8a70",
+
+  // Brand accent
+  accent: "#2a6a9a",
 };
 
 // Home page
 export const home = {
-  bg: "#0a1628",
-  bgMid: "#111f3a",
-  bgLight: "#1a2d4e",
-  card: "#0f1d34",
-  border: "#1a2d4e",
-  accent: "#6ec4d6", // teal — neutral brand color
+  bg: "#f8f9fb",
+  surface: "#f0f2f5",
+  border: "#e2e5ea",
+  headline: "#141618",
+  body: "#3a3e44",
+  caption: "#6a7078",
+  muted: "#9aa0a8",
+  faint: "#c0c4ca",
+  accent: "#2a6a9a",
 };
 
 // Football section
 export const football = {
-  bg: "#0e2818",
-  bgMid: "#133420",
-  bgLight: "#1a4028",
-  card: "#0c2418",
-  cardHover: "#122e1e",
-  border: "#1e4a30",
-  borderHover: "#2a6a40",
-  pitchLine: "#2a6040",
-  pitchLineBright: "#3a7a50",
-  accent: "#6ec4d6",
+  bg: "#f4f8f5",
+  surface: "#e8f0ea",
+  border: "#d4e4d8",
+  headline: "#142a1e",
+  body: "#3a5a44",
+  muted: "#5a7a64",
+  accent: "#1a7a5a",
+  pitchLine: "#d4e4d8",
 
-  // Shirt colors by formation line
-  shirtST: "#ecc06a",      // gold — lead story
-  shirtAM: "#6ec4d6",      // teal — attacking mid
-  shirtDM: "#72cc88",      // bright green — holding
-  shirtDEF: "#8ac0a0",     // muted green — foundation
-
-  // Text
-  offWhite: "#d8e0d4",
-  slate: "#8a9c8e",
-  slateMuted: "#5a7060",
+  // Position badge colors by formation line
+  posAttack: "#c8956a",
+  posMidfield: "#58a06a",
+  posDefence: "#8aaa90",
 };
 
 // F1 section
 export const f1 = {
-  bg: "#0e0e12",
-  bgMid: "#151518",
-  bgLight: "#1c1c22",
-  card: "#151518",
-  border: "#2a2a34",
-  accent: "#b48af0",
+  bg: "#f5f4f8",
+  surface: "#eae8f2",
+  border: "#dcd8ea",
+  headline: "#1a1830",
+  body: "#3a3450",
+  muted: "#6a6480",
+  accent: "#5a4a9a",
 
-  // Timing colors
-  purple: "#9a6adc",
-  purpleLight: "#b48af0",
-  purpleBright: "#c8a4ff",
-  purpleDark: "#4a2a7a",
-  pink: "#dc6ab0",
-  pinkLight: "#f08ad0",
-  teal: "#4acad4",
-  tealLight: "#6ae0ea",
-
-  // Sector colors (authentic F1 timing)
-  sectorPurple: "#a060e0",  // personal best
-  sectorGreen: "#40c060",   // overall fastest
-  sectorYellow: "#d4c040",  // slower
+  // Sector colors
+  sectorPurple: "#7a5ac0",
+  sectorGreen: "#3a9a5a",
+  sectorYellow: "#b09030",
 
   // Grid position colors
-  posFront: "#c8a4ff",      // P1-P2
-  posSecond: "#f08ad0",     // P3-P4
-  posThird: "#6ae0ea",      // P5-P6
-  posBack: "#8888a0",       // P7+
+  posFront: "#5a4a9a",
+  posSecond: "#7a6aaa",
+  posThird: "#9a8aba",
+  posBack: "#a0a0b0",
 
-  // Track elements
-  kerbRed: "#d44040",
-  trackWhite: "#d0d0d8",
+  // Gap Score (purple spectrum)
+  gapHigh: "#4a2a8a",
+  gapMid: "#6a4aaa",
+  gapLow: "#8a80a0",
+};
 
-  // Text
-  offWhite: "#d4d4dc",
-  slate: "#8888a0",
-  slateMuted: "#5a5a70",
+// Cross-sport section
+export const crossSport = {
+  bg: "#f8f6f2",
+  surface: "#f0ece2",
+  border: "#e4dcc8",
+  headline: "#2a2418",
+  body: "#4a4030",
+  muted: "#8a7a58",
+  accent: "#8a6a20",
+  football: "#1a7a5a",
+  f1: "#5a4a9a",
 };
