@@ -1,0 +1,13 @@
+# Delta data pipeline dependencies
+# Install: pip install -r requirements.txt
+
+# Core
+pandas>=2.0
+requests>=2.31
+
+# F1 telemetry data
+fastf1>=3.3
+
+# Web scraping (for FBref, Transfermarkt)
+beautifulsoup4>=4.12
+lxml>=5.0

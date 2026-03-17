@@ -1,0 +1,68 @@
+/* ==========================================================================
+   DELTA — Global Styles
+   ========================================================================== */
+
+/* Google Fonts — loaded here so they're available everywhere */
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&family=Caveat:wght@400&display=swap");
+
+/* Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Typography */
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-hand: "Caveat", cursive;
+
+  /* Shared colors as CSS variables (for things that can't use JS imports) */
+  --white: #f4f6f8;
+  --off-white: #e8ecf0;
+  --slate: #8494a8;
+  --slate-muted: #5a6a7e;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-serif);
+  color: var(--off-white);
+  background: #0a1628;
+  line-height: 1.6;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollbar — subtle, doesn't fight the dark themes */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a3a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a4a;
+}
+
+/* Selection color */
+::selection {
+  background: #6ec4d644;
+  color: #f4f6f8;
+}
