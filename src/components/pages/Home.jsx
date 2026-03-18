@@ -308,19 +308,16 @@ export default function DeltaHome() {
               <div style={{
                 flex: "0 0 45%", background: "#0a1220",
                 borderLeft: "1px solid #A59FC410",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <span style={{ fontStyle: "italic", fontSize: "48px", color: "#A59FC412" }}>{featured.typoText}</span>
-              </div>
+              }} />
             )}
           </div>
         </Link>
       </section>
 
       {/* Recent */}
-      <section style={{ padding: "0 28px 48px" }}>
-        <div style={{ fontSize: "9px", letterSpacing: "0.08em", color: "#A59FC466", marginBottom: "16px" }}>RECENT</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+      <section style={{ padding: "0 28px 60px", marginTop: "60px" }}>
+        <div style={{ fontSize: "10px", letterSpacing: "0.08em", color: "#A59FC466", marginBottom: "24px" }}>RECENT</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
           {recent.map((article) => (
             <Link
               key={article.slug}
@@ -334,36 +331,54 @@ export default function DeltaHome() {
                 border: `1px solid ${hovered === article.slug ? "#A59FC433" : "#A59FC418"}`,
                 borderRadius: "12px", overflow: "hidden",
                 display: "flex", flexDirection: "column", cursor: "pointer",
+                minHeight: "320px",
                 transition: "background 0.2s, border-color 0.2s",
               }}>
-                <div style={{ height: "140px", overflow: "hidden" }}>
-                  {article.visual === "photo" && article.image ? (
-                    <img src={article.image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  ) : (
-                    <div style={{
-                      width: "100%", height: "100%", background: "#0a1220",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <span style={{ fontStyle: "italic", fontSize: "48px", color: "#A59FC412" }}>
-                        {article.typoText || ""}
-                      </span>
-                    </div>
+                <div style={{
+                  position: "relative",
+                  flex: "0 0 58%",
+                  minHeight: "182px",
+                  overflow: "hidden",
+                  background: "#0a1220",
+                  borderBottom: "1px solid #A59FC410",
+                }}>
+                  {article.visual === "photo" && article.image && (
+                    <img
+                      src={article.image}
+                      alt=""
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
                   )}
+                  <span style={{
+                    position: "absolute",
+                    right: "12px",
+                    bottom: "12px",
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: sportColor(article.sport),
+                    opacity: 0.3,
+                  }} />
                 </div>
-                <div style={{ padding: "16px" }}>
+                <div style={{ padding: "18px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
                     <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: sportColor(article.sport) }} />
                     <span style={{ fontSize: "9px", color: "#5a6484" }}>{(article.sport || "").toUpperCase()}</span>
                     <span style={{ fontSize: "9px", fontStyle: "italic", color: "#3a4464" }}>{article.type}</span>
                   </div>
-                  <h3 style={{ fontStyle: "italic", fontSize: "17px", color: "#dde0ec", lineHeight: 1.25, marginBottom: "6px" }}>
+                  <h3 style={{ fontStyle: "italic", fontSize: "22px", color: "#dde0ec", lineHeight: 1.25, marginBottom: "10px" }}>
                     {article.title}
                   </h3>
-                  <p style={{ fontSize: "11px", color: "#5a6484", lineHeight: 1.5, marginBottom: "12px" }}>
+                  <p style={{ fontSize: "12px", color: "#5a6484", lineHeight: 1.6, marginBottom: "16px" }}>
                     {article.subtitle}
                   </p>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span style={{ fontStyle: "italic", fontSize: "17px", color: "#A59FC4" }}>{article.gap}</span>
+                    <span style={{ fontStyle: "italic", fontSize: "22px", color: "#A59FC4" }}>{article.gap}</span>
                     <span style={{ fontSize: "10px", color: "#3a4464" }}>{article.date}</span>
                   </div>
                 </div>
@@ -374,20 +389,20 @@ export default function DeltaHome() {
       </section>
 
       {/* Section cards */}
-      <section style={{ padding: "0 28px 48px", display: "flex", gap: "10px" }}>
+      <section style={{ padding: "0 28px 60px", marginTop: "60px", display: "flex", gap: "24px" }}>
         {sections.map((s) => (
           <Link key={s.label} href={s.href} style={{
             textDecoration: "none", flex: 1,
             background: "#0d1a30", border: "1px solid #A59FC418",
-            borderRadius: "10px", padding: "12px",
+            borderRadius: "10px", padding: "18px",
             transition: "border-color 0.2s",
           }}
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#A59FC433"; }}
           onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#A59FC418"; }}
           >
-            <div style={{ width: "18px", height: "2px", background: s.color, marginBottom: "10px", borderRadius: "1px" }} />
-            <h4 style={{ fontStyle: "italic", fontSize: "13px", color: "#dde0ec", marginBottom: "4px" }}>{s.label}</h4>
-            <p style={{ fontSize: "9px", color: "#3a4464" }}>{s.desc}</p>
+            <div style={{ width: "22px", height: "2px", background: s.color, marginBottom: "12px", borderRadius: "1px" }} />
+            <h4 style={{ fontStyle: "italic", fontSize: "16px", color: "#dde0ec", marginBottom: "6px" }}>{s.label}</h4>
+            <p style={{ fontSize: "11px", color: "#3a4464", lineHeight: 1.5 }}>{s.desc}</p>
           </Link>
         ))}
       </section>
