@@ -137,26 +137,30 @@ export default function DeltaHome() {
       ctx.clearRect(0, 0, width, height);
 
       const t = now;
-      const anchorX =
+      const rawAnchorX =
         width * 0.69 +
-        Math.sin(t * 0.00012) * width * 0.007 +
-        Math.sin(t * 0.00028) * width * 0.0025;
-      const anchorY =
-        height * 0.58 +
-        Math.cos(t * 0.00011) * height * 0.006 +
-        Math.sin(t * 0.00025) * height * 0.0022;
+        Math.sin(t * 0.0001) * width * 0.0025 +
+        Math.sin(t * 0.00022) * width * 0.0012;
+      const rawAnchorY =
+        height * 0.575 +
+        Math.cos(t * 0.00009) * height * 0.0018 +
+        Math.sin(t * 0.0002) * height * 0.0009;
+
+      // Keep the stripe locked near the top-right hero region.
+      const anchorX = Math.max(width * 0.675, Math.min(width * 0.705, rawAnchorX));
+      const anchorY = Math.max(height * 0.57, Math.min(height * 0.582, rawAnchorY));
 
       const baseRotation =
         0.21 +
         t * 0.000007 +
-        Math.sin(t * 0.0001) * 0.024 +
-        Math.sin(t * 0.0002) * 0.007;
+        Math.sin(t * 0.0001) * 0.01 +
+        Math.sin(t * 0.0002) * 0.003;
 
       for (let i = 0; i < bands.length; i += 1) {
         const bandRotation =
           baseRotation +
           bands[i].rotationOffset +
-          Math.sin(t * 0.00008 + i * 0.9) * 0.007;
+          Math.sin(t * 0.00008 + i * 0.9) * 0.003;
         drawBand(t, bands[i], i, anchorX, anchorY, bandRotation);
       }
 
